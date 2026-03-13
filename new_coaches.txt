@@ -1,0 +1,51 @@
+            <!-- Coach 2 -->
+            <div class="glass-card border-none backdrop-blur-2xl border border-chess-700/50 rounded-[2rem] p-8 flex flex-col items-center max-w-xs mx-auto">
+              <img src="./asserts/tharsi.png" alt="Coach Tharsi" class="rounded-full w-44 h-44 object-cover mb-6 shadow-lg" />
+              <h3 class="text-2xl font-semibold mb-2 text-chess-100">THARSIKAN. V</h3>
+              <p class="text-chess-accent font-medium mb-1">ARENA FEDERATION MASTER</p>
+              <p class="text-chess-100 text-lg mb-3">Rating: 1527</p>
+              <div class="text-chess-100 text-sm space-y-1">
+                <p>
+                  <strong>Email:</strong>
+                  <a href="mailto:tharsiktharsikan@gmail.com" class="text-chess-accent hover:underline">tharsiktharsikan@gmail.com</a>
+                </p>
+                <p>
+                  <strong>Phone:</strong>
+                  <a href="tel:+94 75 317 5528" class="text-chess-accent hover:underline">+94 75 317 5528</a>
+                </p>
+              </div>
+            </div>
+
+            <!-- Coach 3 -->
+            <div class="glass-card border-none backdrop-blur-2xl border border-chess-700/50 rounded-[2rem] p-8 flex flex-col items-center max-w-xs mx-auto w-full">
+              <img src="https://ui-avatars.com/api/?name=Kopith+V&background=f59e0b&color=030712&size=200" alt="Coach Kopith" class="rounded-full w-44 h-44 object-cover mb-6 shadow-lg border-4 border-chess-800" />
+              <h3 class="text-2xl font-semibold mb-2 text-chess-100">KOPITH. V</h3>
+              <p class="text-chess-accent font-medium mb-1 uppercase text-center leading-snug">Professional Chess Coach</p>
+              <div class="text-chess-100 text-sm space-y-1 mt-4">
+                <p>
+                  <strong>Email:</strong>
+                  <a href="mailto:kopith.chess@example.com" class="text-chess-accent hover:underline">kopith.chess@example.com</a>
+                </p>
+                <p>
+                  <strong>Phone:</strong>
+                  <a href="tel:+94 77 000 0001" class="text-chess-accent hover:underline">+94 77 000 0001</a>
+                </p>
+              </div>
+            </div>
+
+            <!-- Coach 4 -->
+            <div class="glass-card border-none backdrop-blur-2xl border border-chess-700/50 rounded-[2rem] p-8 flex flex-col items-center max-w-xs mx-auto w-full">
+              <img src="https://ui-avatars.com/api/?name=Kanarasan+K&background=3b82f6&color=030712&size=200" alt="Coach Kanarasan" class="rounded-full w-44 h-44 object-cover mb-6 shadow-lg border-4 border-chess-800" />
+              <h3 class="text-2xl font-semibold mb-2 text-chess-100">KANARASAN. K</h3>
+              <p class="text-chess-accent font-medium mb-1 uppercase text-center leading-snug">Professional Chess Coach</p>
+              <div class="text-chess-100 text-sm space-y-1 mt-4">
+                <p>
+                  <strong>Email:</strong>
+                  <a href="mailto:kanarasan.chess@example.com" class="text-chess-accent hover:underline">kanarasan.chess@example.com</a>
+                </p>
+                <p>
+                  <strong>Phone:</strong>
+                  <a href="tel:+94 76 000 0002" class="text-chess-accent hover:underline">+94 76 000 0002</a>
+                </p>
+              </div>
+            </div>

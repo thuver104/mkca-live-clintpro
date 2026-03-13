@@ -109,8 +109,19 @@
     <div class="absolute top-[20%] -right-[10%] w-[40vw] h-[40vw] rounded-full bg-chess-accent/10 mix-blend-screen filter blur-[100px] animate-blob" style="animation-delay: 2s"></div>
     <div class="absolute -bottom-[20%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-600/10 mix-blend-screen filter blur-[120px] animate-blob" style="animation-delay: 4s"></div>
     <!-- Chess Board Pattern Overlay -->
-    <div class="absolute inset-0 opacity-[0.015]" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 40px 40px;"></div>
-  </div>
+      <div class="absolute inset-0 opacity-[0.015]" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 40px 40px;"></div>
+      
+      <!-- Floating Chess Pieces -->
+      <div class="text-6xl text-slate-100/5 absolute animate-float" style="top: 15%; left: 10%">♛</div>
+      <div class="text-6xl text-slate-100/5 absolute animate-float" style="top: 25%; right: 15%; animation-delay: -2s">♜</div>
+      <div class="text-6xl text-slate-100/5 absolute animate-float" style="top: 60%; left: 8%; animation-delay: -4s">♝</div>
+      <div class="text-6xl text-slate-100/5 absolute animate-float" style="top: 70%; right: 12%; animation-delay: -1s">♞</div>
+      <div class="text-6xl text-slate-100/5 absolute animate-float" style="top: 40%; left: 85%; animation-delay: -3s">♟</div>
+      <div class="text-6xl text-slate-100/5 absolute animate-float" style="top: 85%; left: 60%; animation-delay: -5s">♚</div>
+      <div class="text-6xl text-slate-100/5 absolute animate-float" style="top: 35%; left: 20%; animation-delay: -2.5s">♙</div>
+      <div class="text-6xl text-slate-100/5 absolute animate-float" style="top: 10%; right: 40%; animation-delay: -4.5s">♔</div>
+    </div>
+
 
   <!-- Floating Navigation -->
   <div class="fixed top-0 left-0 right-0 z-50 p-4 sm:p-6 pointer-events-none">
@@ -190,8 +201,9 @@
             <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold tracking-widest uppercase mb-6 animate-pulse-slow">
               <span class="w-2 h-2 rounded-full bg-red-500"></span> Upcoming Event
             </div>
-            <h2 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.05] tracking-tight mb-4">
-              Magical Knight <br/><span class="text-gradient-gold">Classic 2026</span>
+            <img src="./mkc26/mkc26logo.png" alt="Magical Knight Classic 2026 Logo" class="w-full max-w-[280px] sm:max-w-[320px] mb-6 object-contain" />
+            <h2 class="sr-only">
+              Magical Knight Classic 2026
             </h2>
             <p class="text-slate-400 text-lg sm:text-xl font-light">Exclusive Provincial Super-Tournament for Northern Province Players.</p>
           </div>
@@ -373,19 +385,32 @@
             </h4>
             <div class="grid grid-cols-3 gap-3">
                <!-- Thumbnail representations of the videos pointing to links -->
-               <div class="aspect-video bg-chess-950 rounded-xl overflow-hidden relative group/vid cursor-pointer border border-slate-700">
+               <div onclick="openMediaModal('video', './blog/mcc25/mediaclip/MullaiMedia.mp4')" class="block aspect-video bg-chess-950 rounded-xl overflow-hidden relative group/vid cursor-pointer border border-slate-700">
                   <div class="absolute inset-0 bg-chess-blue/20 flex items-center justify-center opacity-0 group-hover/vid:opacity-100 transition-opacity z-10"><i class="fas fa-play text-white text-2xl drop-shadow-md"></i></div>
                   <video src="./blog/mcc25/mediaclip/MullaiMedia.mp4" class="w-full h-full object-cover opacity-70"></video>
                </div>
-               <div class="aspect-video bg-chess-950 rounded-xl overflow-hidden relative group/vid cursor-pointer border border-slate-700">
+               <div onclick="openMediaModal('video', './blog/mcc25/mediaclip/DanNews.mp4')" class="block aspect-video bg-chess-950 rounded-xl overflow-hidden relative group/vid cursor-pointer border border-slate-700">
                   <div class="absolute inset-0 bg-chess-blue/20 flex items-center justify-center opacity-0 group-hover/vid:opacity-100 transition-opacity z-10"><i class="fas fa-play text-white text-2xl drop-shadow-md"></i></div>
                   <video src="./blog/mcc25/mediaclip/DanNews.mp4" class="w-full h-full object-cover opacity-70"></video>
                </div>
-               <div class="aspect-video bg-chess-950 rounded-xl overflow-hidden relative group/vid cursor-pointer border border-slate-700 text-center flex flex-col items-center justify-center bg-gradient-to-br from-slate-800 to-chess-950">
-                  <i class="fas fa-images text-2xl text-slate-400 mb-1"></i>
-                  <span class="text-xs text-slate-400 font-medium">More Photos</span>
-               </div>
+               <button onclick="document.getElementById('hidden-photo-gallery').classList.toggle('hidden')" class="w-full aspect-video bg-chess-950 rounded-xl overflow-hidden relative group/vid cursor-pointer border border-slate-700 text-center flex flex-col items-center justify-center bg-gradient-to-br from-slate-800 to-chess-950 hover:scale-[1.02] transition-transform">
+                  <i class="fas fa-images text-2xl text-slate-400 mb-1 group-hover/vid:text-white transition-colors"></i>
+                  <span class="text-xs text-slate-400 font-medium group-hover/vid:text-white transition-colors">More Photos</span>
+               </button>
             </div>
+          </div>
+          
+          <!-- Hidden Photo Gallery -->
+          <div id="hidden-photo-gallery" class="hidden mt-6 bg-chess-950/50 p-4 rounded-2xl border border-slate-700/50 animate-fade-in-up">
+             <h5 class="text-white font-semibold mb-3 flex items-center gap-2"><i class="fas fa-camera text-chess-accent"></i> Event Gallery</h5>
+             <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                <div onclick="openMediaModal('image', './blog/mcc25/image1.jpg')" class="cursor-pointer"><img src="./blog/mcc25/image1.jpg" class="w-full h-24 object-cover rounded-lg border border-slate-700 hover:opacity-75 transition-opacity" alt="Gallery"></div>
+                <div onclick="openMediaModal('image', './blog/mcc25/image2.jpg')" class="cursor-pointer"><img src="./blog/mcc25/image2.jpg" class="w-full h-24 object-cover rounded-lg border border-slate-700 hover:opacity-75 transition-opacity" alt="Gallery"></div>
+                <div onclick="openMediaModal('image', './blog/mcc25/image3.jpg')" class="cursor-pointer"><img src="./blog/mcc25/image3.jpg" class="w-full h-24 object-cover rounded-lg border border-slate-700 hover:opacity-75 transition-opacity" alt="Gallery"></div>
+                <div onclick="openMediaModal('image', './blog/mcc25/image4.jpg')" class="cursor-pointer"><img src="./blog/mcc25/image4.jpg" class="w-full h-24 object-cover rounded-lg border border-slate-700 hover:opacity-75 transition-opacity" alt="Gallery"></div>
+                <div onclick="openMediaModal('image', './blog/mcc25/image5.jpg')" class="cursor-pointer"><img src="./blog/mcc25/image5.jpg" class="w-full h-24 object-cover rounded-lg border border-slate-700 hover:opacity-75 transition-opacity" alt="Gallery"></div>
+                <div onclick="openMediaModal('image', './blog/mcc25/image6.jpg')" class="cursor-pointer"><img src="./blog/mcc25/image6.jpg" class="w-full h-24 object-cover rounded-lg border border-slate-700 hover:opacity-75 transition-opacity" alt="Gallery"></div>
+             </div>
           </div>
           
         </div>
@@ -497,5 +522,51 @@
       });
     });
   </script>
+
+  <!-- Media Modal -->
+  <div id="media-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md hidden opacity-0 transition-opacity duration-300" onclick="closeMediaModal()">
+    <button class="absolute top-6 right-6 text-white hover:text-chess-accent text-5xl transition-colors" onclick="closeMediaModal()">&times;</button>
+    <div class="max-w-6xl w-full mx-4 max-h-[90vh] flex justify-center items-center" onclick="event.stopPropagation()">
+      <img id="modal-img" class="hidden max-h-[85vh] w-auto rounded-lg shadow-2xl object-contain" src="" alt="Modal Media" />
+      <video id="modal-vid" class="hidden max-h-[85vh] w-full rounded-lg shadow-2xl" controls controlsList="nodownload"></video>
+    </div>
+  </div>
+
+  <script>
+    function openMediaModal(type, src) {
+      const modal = document.getElementById('media-modal');
+      const img = document.getElementById('modal-img');
+      const vid = document.getElementById('modal-vid');
+      
+      if (type === 'image') {
+        img.src = src;
+        img.classList.remove('hidden');
+        vid.classList.add('hidden');
+        vid.pause();
+      } else if (type === 'video') {
+        vid.src = src;
+        vid.classList.remove('hidden');
+        img.classList.add('hidden');
+        vid.play();
+      }
+      
+      modal.classList.remove('hidden');
+      setTimeout(() => modal.classList.remove('opacity-0'), 10);
+    }
+
+    function closeMediaModal() {
+      const modal = document.getElementById('media-modal');
+      const vid = document.getElementById('modal-vid');
+      
+      modal.classList.add('opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        vid.pause();
+        vid.src = '';
+      }, 300);
+    }
+  </script>
 </body>
 </html>
+
+
