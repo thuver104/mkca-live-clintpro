@@ -1,958 +1,501 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MKCA - Blog</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&family=Noto+Serif:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MKCA - Blog & Announcements</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              serif: ['"Noto Serif"', "serif"],
-              sans: ['"Noto Sans"', "sans-serif"],
-            },
-            colors: {
-              "chess-dark": "#0a0a0a",
-              "chess-darker": "#050505",
-              "chess-accent": "#d4af37",
-              "chess-accent-light": "#f4d03f",
-              "chess-light": "#f8f9fa",
-              "chess-gray": "#6c757d",
-              "chess-blue": "#4a90e2",
-            },
-            backgroundImage: {
-              hero: "url('https://images.unsplash.com/photo-1529699211952-734e80c4d42b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')",
-              "chess-pattern":
-                'url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Crect width="30" height="30"/%3E%3Crect x="30" y="30" width="30" height="30"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')',
-            },
-            animation: {
-              float: "float 6s ease-in-out infinite",
-              glow: "glow 2s ease-in-out infinite alternate",
-              "slide-up": "slideUp 0.8s ease-out",
-              "fade-in": "fadeIn 1s ease-out",
-              "bounce-slow": "bounce 3s infinite",
-            },
-            keyframes: {
-              float: {
-                "0%, 100%": { transform: "translateY(0px)" },
-                "50%": { transform: "translateY(-20px)" },
-              },
-              glow: {
-                "0%": { boxShadow: "0 0 15px rgba(212, 175, 55, 0.5)" },
-                "100%": { boxShadow: "0 0 25px rgba(212, 175, 55, 0.8)" },
-              },
-              slideUp: {
-                "0%": { transform: "translateY(50px)", opacity: "0" },
-                "100%": { transform: "translateY(0)", opacity: "1" },
-              },
-              fadeIn: {
-                "0%": { opacity: "0" },
-                "100%": { opacity: "1" },
-              },
-            },
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
           },
-        },
-      };
-    </script>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const menuButton = document.getElementById("menu-button");
-        const mobileMenu = document.getElementById("mobile-menu");
-
-        // Toggle mobile menu
-        menuButton.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const isCurrentlyOpen = !mobileMenu.classList.contains("translate-x-full");
-          
-          if (isCurrentlyOpen) {
-            // Close menu
-            mobileMenu.classList.add("translate-x-full");
-            menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-            setTimeout(() => {
-              mobileMenu.classList.add("hidden");
-            }, 300);
-          } else {
-            // Open menu
-            mobileMenu.classList.remove("hidden");
-            setTimeout(() => {
-              mobileMenu.classList.remove("translate-x-full");
-            }, 10);
-            menuButton.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+          colors: {
+            chess: {
+              950: '#030712', // Deep near-black slate
+              900: '#0f172a', // Midnight 
+              800: '#1e293b', // Card background
+              700: '#334155', // Borders
+              100: '#f1f5f9', // Light text
+              accent: '#f59e0b', // Gold/Amber
+              accentHover: '#fbbf24',
+              blue: '#3b82f6', // Electric Blue
+            }
+          },
+          animation: {
+            'blob': 'blob 10s infinite',
+            'fade-in-up': 'fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+              '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            },
+            fadeInUp: {
+              '0%': { opacity: '0', transform: 'translateY(40px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-15px)' },
+            }
           }
-        });
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    /* Premium Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #030712; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #f59e0b; }
 
-        // Close menu when clicking outside
-        document.addEventListener("click", (e) => {
-          if (
-            !mobileMenu.contains(e.target) &&
-            !menuButton.contains(e.target) &&
-            !mobileMenu.classList.contains("translate-x-full")
-          ) {
-            mobileMenu.classList.add("translate-x-full");
-            menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-            setTimeout(() => {
-              mobileMenu.classList.add("hidden");
-            }, 300);
-          }
-        });
+    /* Utilities */
+    .glass-nav { 
+      background: rgba(15, 23, 42, 0.65); 
+      backdrop-filter: blur(20px); 
+      -webkit-backdrop-filter: blur(20px); 
+      border: 1px solid rgba(255, 255, 255, 0.08); 
+    }
+    .glass-card { 
+      background: rgba(30, 41, 59, 0.4); 
+      backdrop-filter: blur(16px); 
+      -webkit-backdrop-filter: blur(16px); 
+      border: 1px solid rgba(255, 255, 255, 0.05); 
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+    .text-gradient-gold { 
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+    }
+    .text-gradient-blue { 
+      background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+    }
+    
+    /* Toggle Tabs hiding */
+    .tab-content { display: none; animation: fadeIn 0.5s ease-out; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        // Close menu when clicking a link inside the menu
-        mobileMenu.querySelectorAll("a").forEach((link) => {
-          link.addEventListener("click", () => {
-            mobileMenu.classList.add("translate-x-full");
-            menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-            setTimeout(() => {
-              mobileMenu.classList.add("hidden");
-            }, 300);
-          });
-        });
-      });
-    </script>
-  </head>
-  <body class="bg-chess-dark text-chess-light font-sans overflow-x-hidden">
-    <!-- Floating Chess Pieces Background -->
-    <div class="fixed inset-0 pointer-events-none z-0">
-      <div class="text-6xl opacity-10 absolute animate-float" style="top: 10%; left: 10%">♛</div>
-      <div class="text-6xl opacity-10 absolute animate-float" style="top: 20%; right: 15%; animation-delay: -2s">♜</div>
-      <div class="text-6xl opacity-10 absolute animate-float" style="top: 60%; left: 5%; animation-delay: -4s">♝</div>
-      <div class="text-6xl opacity-10 absolute animate-float" style="top: 70%; right: 10%">♞</div>
-      <div class="text-6xl opacity-10 absolute animate-float" style="top: 40%; left: 80%">♟</div>
-      <div class="text-6xl opacity-10 absolute animate-float" style="top: 80%; left: 70%">♚</div>
+    /* Hide Mobile Menu */
+    .mobile-menu-open { transform: translateY(0%); opacity: 1; pointer-events: auto; }
+    .mobile-menu-closed { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body class="bg-chess-950 text-chess-100 font-sans antialiased overflow-x-hidden selection:bg-chess-accent selection:text-chess-950">
+
+  <!-- Ambient Animated Background -->
+  <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+    <div class="absolute -top-[10%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-chess-blue/10 mix-blend-screen filter blur-[100px] animate-blob"></div>
+    <div class="absolute top-[20%] -right-[10%] w-[40vw] h-[40vw] rounded-full bg-chess-accent/10 mix-blend-screen filter blur-[100px] animate-blob" style="animation-delay: 2s"></div>
+    <div class="absolute -bottom-[20%] left-[20%] w-[60vw] h-[60vw] rounded-full bg-purple-600/10 mix-blend-screen filter blur-[120px] animate-blob" style="animation-delay: 4s"></div>
+    <!-- Chess Board Pattern Overlay -->
+    <div class="absolute inset-0 opacity-[0.015]" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 40px 40px;"></div>
+  </div>
+
+  <!-- Floating Navigation -->
+  <div class="fixed top-0 left-0 right-0 z-50 p-4 sm:p-6 pointer-events-none">
+    <nav class="glass-nav max-w-6xl mx-auto rounded-full px-6 py-3 flex items-center justify-between pointer-events-auto shadow-2xl shadow-black/50 transition-all duration-300 transform hover:scale-[1.01]">
+      <a href="./index.html" class="flex items-center gap-3 group">
+        <img src="./logo-photoaidcom-cropped.jpg" alt="MKCA Logo" class="w-10 h-10 rounded-full object-cover border-2 border-chess-accent/50 group-hover:border-chess-accent transition-colors" />
+        <span class="font-heading font-bold text-xl tracking-wide hidden sm:block text-white">MKCA</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="./index.html" class="text-sm font-medium text-slate-300 hover:text-chess-accent transition-colors">Home</a>
+        <a href="./tournaments.html" class="text-sm font-medium text-slate-300 hover:text-chess-accent transition-colors">Tournaments</a>
+        <a href="./rplayels.html" class="text-sm font-medium text-slate-300 hover:text-chess-accent transition-colors">Rated Players</a>
+        <a href="./blog.html" class="text-sm font-bold text-chess-accent relative after:absolute after:-bottom-2 after:left-0 after:w-full after:h-0.5 after:bg-chess-accent after:rounded-full">Blog</a>
+        <a href="./index.html#contact" class="text-sm font-medium text-slate-300 hover:text-chess-accent transition-colors">Contact</a>
+      </div>
+
+      <!-- CTA & Mobile Toggle -->
+      <div class="flex items-center gap-4">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform" target="_blank" class="hidden sm:inline-flex items-center justify-center bg-chess-accent hover:bg-chess-accentHover text-chess-950 font-bold px-6 py-2.5 rounded-full transition-all duration-300 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] hover:-translate-y-0.5">
+          Register Academy
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden text-slate-200 hover:text-white p-2">
+          <i class="fas fa-bars text-2xl"></i>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 bg-chess-950/95 backdrop-blur-3xl mobile-menu-closed transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col items-center justify-center">
+    <div class="flex flex-col items-center gap-8 text-2xl font-heading font-semibold">
+      <a href="./index.html" class="text-slate-300 hover:text-chess-accent hover:scale-110 transition-all">Home</a>
+      <a href="./tournaments.html" class="text-slate-300 hover:text-chess-accent hover:scale-110 transition-all">Tournaments</a>
+      <a href="./rplayels.html" class="text-slate-300 hover:text-chess-accent hover:scale-110 transition-all">Rated Players</a>
+      <a href="./blog.html" class="text-chess-accent scale-110 drop-shadow-[0_0_10px_rgba(245,158,11,0.5)]">Blog & News</a>
+      <a href="./index.html#contact" class="text-slate-300 hover:text-chess-accent hover:scale-110 transition-all">Contact</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform" target="_blank" class="mt-4 px-8 py-3 bg-chess-accent text-chess-950 rounded-full font-bold">Register Now</a>
     </div>
+  </div>
 
-    <!-- Hero Background with Enhanced Overlay -->
-    <div class="fixed inset-0 bg-hero bg-cover bg-center bg-no-repeat">
-      <div class="absolute inset-0 bg-gradient-to-br from-chess-darker via-chess-dark to-chess-darker opacity-85"></div>
-      <div class="absolute inset-0 bg-chess-pattern"></div>
+  <!-- Hero Section -->
+  <header class="relative pt-40 pb-20 lg:pt-52 lg:pb-32 px-4 text-center z-10 flex flex-col items-center">
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-chess-blue mb-8 animate-fade-in-up">
+      <i class="fas fa-bolt"></i>
+      <span class="text-sm font-semibold tracking-wide uppercase">The Latest from MKCA</span>
     </div>
+    
+    <h1 class="font-heading text-5xl sm:text-7xl lg:text-8xl font-black leading-[1.1] tracking-tight mb-6 max-w-5xl animate-fade-in-up">
+      Mastering the <br class="hidden sm:block" />
+      <span class="text-gradient-gold">Game of Kings.</span>
+    </h1>
+    
+    <p class="font-sans text-lg sm:text-2xl text-slate-400 font-light max-w-2xl mx-auto leading-relaxed mb-12 animate-fade-in-up">
+      Dive into our tournament announcements, tactical insights, and epic stories shaping the North's chess legacy.
+    </p>
 
-    <!-- Navigation -->
-    <nav class="relative z-20 w-full py-6 px-4">
-      <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <div class="font-serif font-bold text-xl text-chess-accent flex items-center space-x-2">
-          <img src="./logo-photoaidcom-cropped.jpg" alt="MKCA Logo" class="w-8 h-8 object-contain" />
-          <span>MKCA</span>
-        </div>
+    <!-- Scroll Indicator -->
+    <a href="#featured" class="w-14 h-20 rounded-full border-2 border-slate-700 flex justify-center p-2 hover:border-chess-accent transition-colors duration-300 group animate-fade-in-up">
+      <div class="w-1.5 h-4 bg-slate-500 group-hover:bg-chess-accent rounded-full animate-float"></div>
+    </a>
+  </header>
 
-        <!-- Desktop Menu -->
-        <div class="hidden md:flex space-x-6 items-center">
-          <a href="./index.html" class="hover:text-chess-accent transition-colors duration-300">Home</a>
-          <a href="./index.html#coach" class="hover:text-chess-accent transition-colors duration-300">Coaches</a>
-          <a href="./tournaments.html" class="hover:text-chess-accent transition-colors duration-300">Tournaments</a>
-          <a href="./rplayels.html" class="hover:text-chess-accent transition-colors duration-300">Rated Players</a>
-          <a href="./blog.html" class="text-chess-accent transition-colors duration-300">Blog</a>
-          <a href="./index.html#contact" class="hover:text-chess-accent transition-colors duration-300">Contact</a>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform?usp=header"
-            target="_blank"
-            class="bg-chess-accent text-gray-900 font-semibold px-4 py-2 rounded-md hover:bg-chess-accent-dark transition-colors duration-300"
-          >
-            Register Now
+  <!-- IMPORTANT: Featured Tournament (Magical Knight Classic 2026) -->
+  <main id="featured" class="max-w-7xl mx-auto px-4 z-10 relative mb-32" style="scroll-margin-top: 120px;">
+    
+    <div class="glass-card rounded-[2.5rem] md:rounded-[3rem] p-1 shadow-2xl relative overflow-hidden group">
+      <!-- Glow effect on hover -->
+      <div class="absolute inset-0 bg-gradient-to-br from-chess-accent/10 to-chess-blue/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+      
+      <div class="bg-chess-900/60 rounded-[2.4rem] md:rounded-[2.9rem] p-6 sm:p-10 lg:p-16 flex flex-col lg:flex-row gap-12 lg:gap-16">
+        
+        <!-- Left: Poster / TL;DR Side -->
+        <div class="lg:w-5/12 flex flex-col justify-center">
+          <div class="mb-8">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold tracking-widest uppercase mb-6 animate-pulse-slow">
+              <span class="w-2 h-2 rounded-full bg-red-500"></span> Upcoming Event
+            </div>
+            <h2 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.05] tracking-tight mb-4">
+              Magical Knight <br/><span class="text-gradient-gold">Classic 2026</span>
+            </h2>
+            <p class="text-slate-400 text-lg sm:text-xl font-light">Exclusive Provincial Super-Tournament for Northern Province Players.</p>
+          </div>
+
+          <div class="flex flex-col gap-5 mb-10">
+            <div class="flex items-center gap-4 bg-white/5 rounded-2xl p-4 border border-white/5">
+              <div class="w-12 h-12 rounded-xl bg-chess-accent/20 flex items-center justify-center text-chess-accent text-xl shrink-0"><i class="fas fa-calendar-alt"></i></div>
+              <div>
+                <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-0.5">Date & Time</p>
+                <p class="text-white font-semibold">01 April 2026, 8:30 AM</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 bg-white/5 rounded-2xl p-4 border border-white/5">
+              <div class="w-12 h-12 rounded-xl bg-chess-blue/20 flex items-center justify-center text-chess-blue text-xl shrink-0"><i class="fas fa-map-pin"></i></div>
+              <div>
+                <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-0.5">Location</p>
+                <p class="text-white font-semibold">Kilinochchi Maha Vidyalayam</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 bg-white/5 rounded-2xl p-4 border border-white/5">
+              <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-xl shrink-0"><i class="fas fa-trophy"></i></div>
+              <div>
+                <p class="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-0.5">Categories</p>
+                <p class="text-white font-medium text-sm">Under 6, 8, 10, 12, 14 & Above 14 (Boys/Girls) + Parents</p>
+              </div>
+            </div>
+          </div>
+
+          <a href="./pdf/ᴍᴀɢɪᴄᴀʟ ᴋɴɪɢʜᴛ ᴄʟᴀꜱꜱɪᴄ ᴄʜᴇꜱꜱ ᴛᴏᴜʀɴᴀᴍᴇɴᴛ 2026.pdf" target="_blank" class="group flex items-center justify-center gap-3 bg-chess-accent hover:bg-chess-accentHover text-chess-950 font-bold py-4 px-8 rounded-2xl transition-all duration-300 hover:shadow-[0_10px_30px_rgba(245,158,11,0.3)] hover:-translate-y-1 w-full text-lg">
+            <i class="fas fa-file-download text-xl group-hover:animate-bounce"></i>
+            Download Full PDF
           </a>
         </div>
 
-        <!-- Mobile Menu Button -->
-        <button id="menu-button" class="md:hidden text-chess-accent focus:outline-none" aria-label="Toggle Menu">
-          <i class="fas fa-bars text-2xl"></i>
-        </button>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden fixed top-0 right-0 h-screen w-64 bg-chess-dark/95 backdrop-blur-2xl border border-white/30 z-30 p-6 transition-transform duration-300 ease-in-out transform translate-x-full">
-          <div class="flex flex-col space-y-6 mt-16">
-            <a href="./index.html" class="text-lg hover:text-chess-accent transition-colors duration-300">Home</a>
-            <a href="./index.html#coach" class="text-lg hover:text-chess-accent transition-colors duration-300">Coaches</a>
-            <a href="./tournaments.html" class="text-lg hover:text-chess-accent transition-colors duration-300">Tournaments</a>
-            <a href="./rplayels.html" class="text-lg hover:text-chess-accent transition-colors duration-300">Rated Players</a>
-            <a href="./blog.html" class="text-lg text-chess-accent transition-colors duration-300">Blog</a>
-            <a href="./index.html#contact" class="text-lg hover:text-chess-accent transition-colors duration-300">Contact</a>
-            <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform?usp=header"
-              target="_blank"
-              class="bg-chess-accent text-gray-900 font-semibold px-4 py-2 rounded-md hover:bg-chess-accent-dark transition-colors duration-300"
-            >
-              Register Now
-            </a>
+        <!-- Right: Details Tabs -->
+        <div class="lg:w-7/12 flex flex-col">
+          <div class="glass-card rounded-[2rem] p-2 flex gap-2 mb-8 bg-chess-950/50 w-full sm:w-max">
+            <button onclick="switchTab('tamil-tab')" id="btn-tamil-tab" class="tab-btn flex-1 sm:px-8 py-3 rounded-full font-heading font-bold text-chess-950 bg-chess-accent transition-all duration-300">
+              தமிழ் அறிவிப்பு
+            </button>
+            <button onclick="switchTab('english-tab')" id="btn-english-tab" class="tab-btn flex-1 sm:px-8 py-3 rounded-full font-heading font-medium text-slate-400 hover:text-white transition-all duration-300">
+              English Details
+            </button>
           </div>
-        </div>
-      </div>
-    </nav>
 
-    <!-- Hero Section -->
-    <section class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12 text-center">
-      <div class="animate-slide-up">
-        <h1 class="font-serif font-bold text-5xl md:text-7xl lg:text-8xl mb-6 tracking-wider drop-shadow-2xl">
-          <span class="bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">MKCA</span><br />
-          <span class="text-chess-light">Blog</span>
-        </h1>
-
-        <p class="font-sans text-xl md:text-3xl lg:text-4xl tracking-wide mb-4 max-w-4xl text-chess-light/90 font-light">
-          Insights, Strategies & Stories
-        </p>
-
-        <p class="font-sans text-lg md:text-xl mb-12 max-w-3xl text-chess-gray font-light leading-relaxed">
-          Discover chess wisdom, tournament stories, and strategic insights from our academy.
-        </p>
-      </div>
-
-      <!-- Scroll Indicator -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-slow">
-        <i class="fas fa-chevron-down text-chess-accent text-2xl"></i>
-      </div>
-    </section>
-
-
-    <!-- Blog Posts Section -->
-    <section id="blog-posts" class="relative z-10 py-20 px-4">
-      <div class="max-w-7xl mx-auto">
-        <h2 class="font-serif text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
-          Latest Posts
-        </h2>
-        
-        <!-- Featured Blog Post - Full Width -->
-        <div class="mb-16">
-          <article class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 md:p-12 transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
-            <div class="text-center mb-8">
-              <!-- Thumbnail Image -->
-              <div class="mb-6">
-                <img src="./blog/mcc25/mcc25.webp" alt="Mullai Chess Championship 2025 Banner" class="w-full max-w-2xl mx-auto rounded-2xl shadow-lg object-cover cursor-pointer" onclick="openModal(this.src)" />
-              </div>
-              <div class="inline-block bg-chess-accent text-gray-900 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-                FEATURED POST
-              </div>
-              <h3 class="font-serif text-2xl md:text-3xl font-bold mb-4 text-chess-light">
-                Magical Knight Chess Academy – முல்லை CHESS சாம்பியன்ஷிப் 2025
-              </h3>
-              <div class="flex items-center justify-center text-sm text-chess-gray mb-6">
-                <span>September 27, 2025</span>
-                <span class="mx-2">•</span>
-                <span>Tournament Report</span>
-                <span class="mx-2">•</span>
-                <span>12 min read</span>
-              </div>
-            </div>
+          <div class="bg-chess-800/30 border border-chess-700/50 rounded-[2rem] p-6 sm:p-8 flex-1">
             
-            <div class="prose prose-invert max-w-none text-chess-light/90 leading-relaxed">
-              <p class="text-lg font-semibold mb-6 text-chess-accent">
-                முல்லைத்தீவு மாவட்டத்தின் சதுரங்க வரலாற்றில் புதிய பொற்காலத்தை உருவாக்கிய ஒரு பெரும் நிகழ்வாக, Magical Knight Chess Academy (MKCA) பெருமையுடன் நடத்திய முல்லை CHESS சாம்பியன்ஷிப் 2025 மிகுந்த சிறப்புடனும் வெற்றிகரமாகவும் நிறைவடைந்துள்ளது.
-              </p>
+            <!-- Tamil Tab -->
+            <div id="tamil-tab" class="tab-content active text-slate-300 text-lg leading-relaxed space-y-5">
+              <p class="font-medium text-white border-l-4 border-chess-accent pl-4">வடமாகாண சதுரங்க வீரர்களுக்கான மாபெரும் சதுரங்க சுற்றுப்போட்டி தொடர்பானது....</p>
               
-              <p class="mb-6 text-lg">
-                இது ஒரு சாதாரண போட்டி அல்ல – மாவட்டத்தின் சதுரங்க வளர்ச்சிக்கு ஒரு மைல்கல்லாக அமைந்த, புதிய தலைமுறையை அறிவாற்றலிலும், போட்டித் திறனிலும், ஒற்றுமையிலும் உயர்த்திய நிகழ்வாகும்.
-              </p>
-
-              <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">முல்லை CHESS சாம்பியன்ஷிப் 2025 – ஒரு வரலாற்று மைல்கல்</h4>
+              <p>வருகின்ற <span class="text-chess-accent font-bold">2026.04.01ம் திகதி (புதன்கிழமை)</span> MAGICAL KNIGHT CHESS ACADEMY இனால் வடமாகண சதுரங்க வீரர்களை மாத்திரம் உள்ளடக்கிய <strong class="text-white">MAGICAL KNIGHT CLASSIC</strong> சதுரங்க போட்டியானது நடைபெற உள்ளது. இந்த போட்டிகள் கிளி/கிளிநொச்சி மகா வித்தியாலயத்தில் காலை 8.30 மணிக்கு ஆரம்பம் ஆகும்.</p>
               
-              <p class="mb-6">
-                முல்லைத்தீவு மாவட்டம், வட இலங்கையின் கல்வி, பண்பாடு மற்றும் விளையாட்டுத் துறைகளில் விரைவாக முன்னேறி வரும் பிரதேசங்களில் ஒன்று. ஆனால் சதுரங்கம் போன்ற ஆழ்ந்த சிந்தனை, யுக்தி, பொறுமை மற்றும் மனோபலத்தைக் கோரும் விளையாட்டில், மாவட்டத்துக்கு ஒரு தனித்துவமான வளர்ச்சி தேவைப்பட்டது.
-              </p>
+              <p>போட்டிகள் ஆனது.... 6 வயது, 8 வயது, 10 வயது, 12 வயது, 14 வயதின் கீழ் ஆண்கள், பெண்கள் மற்றும் 14 வயதின் மேல் ஆண்கள், பெண்கள் என 14 வயது பிரிவுகளை உள்ளடக்கியதாக நடைபெற உள்ளது. அது தவிர பெற்றோர்களுக்கான சதுரங்க போட்டிகளும் நடைபெற உள்ளது.</p>
               
-              <p class="mb-6">
-                அந்த வளர்ச்சிக்கான தீபம் போலவே, Magical Knight Chess Academy கடந்த சில ஆண்டுகளாக செயல்பட்டு வந்தது. இப்போது, முல்லை CHESS சாம்பியன்ஷிப் 2025 மூலம் அந்த முயற்சி மாவட்ட அளவிலிருந்து தேசிய, சர்வதேச கவனத்துக்கு சென்றிருக்கிறது.
-              </p>
+              <p>ஒவ்வொரு வயது பிரிவிலும் 15 வெற்றியாளர்கள் என <span class="text-chess-accent font-bold">225 வெற்றியாளர்கள்</span> தெரிவு செய்யப்பட்டு வெற்றிக்கிண்ணம், வெற்றிபதக்கம், வெற்றிசான்றிதழ் வழங்கி வைக்கப்படும். போட்டியில் பங்குபற்றும் அனைவருக்கும் பங்குபற்றுதல் சான்றிதழ் வழங்கிவைக்கப்படும்.</p>
               
-              <div class="bg-white/5 rounded-2xl p-6 mb-6 text-center">
-                <div class="text-4xl font-bold text-chess-accent mb-2">350+</div>
-                <p class="text-chess-light">திறமையான சதுரங்க வீரர்கள் பங்கேற்பு</p>
-                <p class="text-chess-gray text-sm mt-2">மாவட்ட சதுரங்க வரலாற்றில் இதுவரை இல்லாத பெரிய சாதனை</p>
-              </div>
-              
-              <!-- Show More/Less Button -->
-              <div id="blog-content-1" class="hidden">
-                
-                <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">இளம் வயதினரின் பெரும் பங்கேற்பு</h4>
-                
-                <p class="mb-6">
-                  சதுரங்கம் ஒரு விளையாட்டாக மட்டுமல்லாது, வாழ்க்கையில் எதிர்கொள்ளும் சவால்களை சமாளிக்கக் கற்றுத்தரும் மனஅறிவு பயிற்சியாகவும் திகழ்கிறது. முல்லைத்தீவில் இளம் வயதினர் சதுரங்கத்துக்கு அதிக ஆர்வம் காட்டி வருவது குறிப்பிடத்தக்கது.
-                </p>
-                
-                <p class="mb-6">
-                  முல்லை CHESS சாம்பியன்ஷிப் 2025-ல் பள்ளி மாணவர்கள், பல்கலைக்கழக மாணவர்கள் மற்றும் புதிதாக விளையாட்டில் ஈடுபட்டிருக்கும் சிறுவர்கள் தங்களது திறமையை வெளிப்படுத்தினர். இது சதுரங்கம் மீதான இளம் தலைமுறையின் ஈடுபாட்டையும், எதிர்கால சாம்பியன்கள் உருவாகும் வாய்ப்பையும் வெளிப்படுத்துகிறது.
-                </p>
-
-                <!-- Tournament Images Gallery -->
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-                  <img src="./blog/mcc25/image1.jpg" alt="Tournament Scene 1" class="w-full h-48 object-cover rounded-lg cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openModal(this.src)" />
-                  <img src="./blog/mcc25/image2.jpg" alt="Tournament Scene 2" class="w-full h-48 object-cover rounded-lg cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openModal(this.src)" />
-                  <img src="./blog/mcc25/image3.jpg" alt="Tournament Scene 3" class="w-full h-48 object-cover rounded-lg cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openModal(this.src)" />
-                  <img src="./blog/mcc25/image4.jpg" alt="Tournament Scene 4" class="w-full h-48 object-cover rounded-lg cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openModal(this.src)" />
-                  <img src="./blog/mcc25/image5.jpg" alt="Tournament Scene 5" class="w-full h-48 object-cover rounded-lg cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openModal(this.src)" />
-                  <img src="./blog/mcc25/image6.jpg" alt="Tournament Scene 6" class="w-full h-48 object-cover rounded-lg cursor-pointer hover:scale-105 transition-transform duration-300" onclick="openModal(this.src)" />
-                </div>
-
-                <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">மீடியா கவரேஜ் - Media Coverage</h4>
-                
-                <p class="mb-6">
-                  முல்லை CHESS சாம்பியன்ஷிப் 2025 மாவட்டத்தின் பல்வேறு ஊடக நிறுவனங்களின் கவனத்தை ஈர்த்தது. இந்நிகழ்வின் சிறப்பம்சங்களை உள்ளூர் செய்தி நிறுவனங்கள் விரிவாக அறிக்கையிட்டன.
-                </p>
-                
-                <!-- Media Coverage Section -->
-                <div class="bg-white/5 rounded-2xl p-6 mb-6">
-                  <h5 class="font-serif text-lg font-bold mb-4 text-chess-accent flex items-center">
-                    <i class="fas fa-video mr-2"></i>
-                    விரிவான மீடியா கவரேஜ் - Comprehensive Media Coverage
-                  </h5>
-                  
-                  <!-- Video Coverage Grid -->
-                  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                    <!-- Mullai Media Coverage -->
-                    <div class="bg-white/5 rounded-xl p-4">
-                      <h6 class="font-semibold text-chess-light mb-3 flex items-center">
-                        <i class="fas fa-broadcast-tower mr-2 text-chess-accent"></i>
-                        Mullai Media
-                      </h6>
-                      <video 
-                        controls 
-                        class="w-full rounded-lg mb-3 shadow-lg"
-                        poster="./blog/mcc25/mcc25.webp"
-                      >
-                        <source src="./blog/mcc25/mediaclip/MullaiMedia.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                      </video>
-                      <p class="text-xs text-chess-gray">
-                        <i class="fas fa-copyright mr-1"></i>
-                        <strong>Copyright:</strong> Mullai Media - முல்லை மீடியா
-                      </p>
-                      <p class="text-xs text-chess-light/80 mt-1">
-                        Tournament highlights and player interviews
-                      </p>
-                    </div>
-                    
-                    <!-- DAN News Coverage -->
-                    <div class="bg-white/5 rounded-xl p-4">
-                      <h6 class="font-semibold text-chess-light mb-3 flex items-center">
-                        <i class="fas fa-newspaper mr-2 text-chess-accent"></i>
-                        DAN News
-                      </h6>
-                      <video 
-                        controls 
-                        class="w-full rounded-lg mb-3 shadow-lg"
-                        poster="./blog/mcc25/mcc25.webp"
-                      >
-                        <source src="./blog/mcc25/mediaclip/DanNews.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                      </video>
-                      <p class="text-xs text-chess-gray">
-                        <i class="fas fa-copyright mr-1"></i>
-                        <strong>Copyright:</strong> DAN News
-                      </p>
-                      <p class="text-xs text-chess-light/80 mt-1">
-                        Championship ceremony and winner announcements
-                      </p>
-                    </div>
-
-                    <!-- Samogam Media Coverage -->
-                    <div class="bg-white/5 rounded-xl p-4">
-                      <h6 class="font-semibold text-chess-light mb-3 flex items-center">
-                        <i class="fas fa-video mr-2 text-chess-accent"></i>
-                        Samogam Media
-                      </h6>
-                      <video 
-                        controls 
-                        class="w-full rounded-lg mb-3 shadow-lg"
-                        poster="./blog/mcc25/mcc25.webp"
-                      >
-                        <source src="./blog/mcc25/mediaclip/VID-20250929-WA0039.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                      </video>
-                      <p class="text-xs text-chess-gray">
-                        <i class="fas fa-copyright mr-1"></i>
-                        <strong>Copyright:</strong> Samogam Media - சமோகம் மீடியா
-                      </p>
-                      <p class="text-xs text-chess-light/80 mt-1">
-                        Detailed tournament coverage and analysis
-                      </p>
-                    </div>
-                  </div>
-
-                  <!-- Print Media Coverage -->
-                  <div class="mb-6">
-                    <h6 class="font-serif text-lg font-bold mb-4 text-chess-accent flex items-center">
-                      <i class="fas fa-newspaper mr-2"></i>
-                      அச்சு ஊடகங்கள் - Print Media Coverage
-                    </h6>
-                    
-                    <div class="grid md:grid-cols-2 gap-6">
-                      <!-- Mullai Murasu Newspaper -->
-                      <div class="bg-white/5 rounded-xl p-4">
-                        <h6 class="font-semibold text-chess-light mb-3 flex items-center">
-                          <i class="fas fa-newspaper mr-2 text-chess-accent"></i>
-                          Mullai Murasu - முல்லை முரசு
-                        </h6>
-                        <div class="relative">
-                          <img 
-                            src="./blog/mcc25/mediaclip/WhatsApp Image 2025-09-29 at 17.51.48_231aa470.jpg" 
-                            alt="Mullai Murasu Newspaper Coverage" 
-                            class="w-full rounded-lg mb-3 shadow-lg cursor-pointer hover:scale-105 transition-transform duration-300" 
-                            onclick="openModal(this.src)"
-                          />
-                          <div class="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs">
-                            <i class="fas fa-search-plus mr-1"></i>Click to enlarge
-                          </div>
-                        </div>
-                        <p class="text-xs text-chess-gray">
-                          <i class="fas fa-copyright mr-1"></i>
-                          <strong>Copyright:</strong> Mullai Murasu - முல்லை முரசு
-                        </p>
-                        <p class="text-xs text-chess-light/80 mt-1">
-                          Comprehensive print coverage of the championship
-                        </p>
-                      </div>
-
-                      <!-- Tamil Win Online Article -->
-                      <div class="bg-white/5 rounded-xl p-4">
-                        <h6 class="font-semibold text-chess-light mb-3 flex items-center">
-                          <i class="fas fa-globe mr-2 text-chess-accent"></i>
-                          Tamil Win Online
-                        </h6>
-                        <div class="bg-gradient-to-br from-chess-accent/20 to-chess-accent/10 rounded-lg p-4 mb-3 border border-chess-accent/30">
-                          <div class="text-center mb-3">
-                            <i class="fas fa-external-link-alt text-3xl text-chess-accent mb-2"></i>
-                            <p class="text-sm text-chess-light/90">விரிவான ஆன்லைன் கட்டுரை</p>
-                          </div>
-                          <a 
-                            href="https://tamilwin.com/article/mullaitivu-chess-competition-1759123557" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            class="block w-full bg-chess-accent text-gray-900 font-semibold py-2 px-4 rounded-md hover:bg-chess-accent-light transition-colors duration-300 text-center"
-                          >
-                            <i class="fas fa-newspaper mr-2"></i>
-                            Read Full Article
-                          </a>
-                        </div>
-                        <p class="text-xs text-chess-gray">
-                          <i class="fas fa-copyright mr-1"></i>
-                          <strong>Copyright:</strong> Tamil Win - தமிழ் வின்
-                        </p>
-                        <p class="text-xs text-chess-light/80 mt-1">
-                          Detailed online coverage and tournament analysis
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="mt-4 p-4 bg-chess-accent/10 border border-chess-accent/30 rounded-lg">
-                    <p class="text-sm text-chess-light/90 mb-2">
-                      <i class="fas fa-info-circle mr-2 text-chess-accent"></i>
-                      <strong>மீடியா பங்களிப்பு:</strong> இந்நிகழ்வின் வெற்றிக்கு உள்ளூர் மற்றும் தேசிய ஊடக நிறுவனங்களின் பங்களிப்பும் முக்கியமானது.
-                    </p>
-                    <div class="grid md:grid-cols-2 gap-4 text-xs text-chess-light/80">
-                      <div>
-                        <p><strong class="text-chess-accent">வீடியோ கவரேஜ்:</strong></p>
-                        <ul class="ml-4 space-y-1">
-                          <li>• Mullai Media - முல்லை மீடியா</li>
-                          <li>• DAN News</li>
-                          <li>• Samogam Media - சமோகம் மீடியா</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p><strong class="text-chess-accent">அச்சு & ஆன்லைன்:</strong></p>
-                        <ul class="ml-4 space-y-1">
-                          <li>• Mullai Murasu - முல்லை முரசு</li>
-                          <li>• Tamil Win - தமிழ் வின்</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">சதுரங்க வளர்ச்சிக்கான அடித்தளம்</h4>
-                
-                <p class="mb-6">
-                  சமீப ஆண்டுகளில் முல்லைத்தீவு மாவட்டம் சதுரங்கத்தில் வேகமான முன்னேற்றத்தை கண்டுள்ளது. பல்வேறு பள்ளிகள் மற்றும் அமைப்புகள் இணைந்து சதுரங்கத்தை வளர்த்ததோடு, Magical Knight Chess Academy போன்ற முன்னோடி அமைப்புகள் தொடர்ந்து பயிற்சி முகாம்கள், பயிற்சி போட்டிகள், விழிப்புணர்வு நிகழ்வுகள் போன்றவற்றை ஏற்பாடு செய்து வருகின்றன.
-                </p>
-                
-                <p class="mb-6">
-                  இந்த வளர்ச்சியின் விளைவாக, முல்லைத்தீவில் இருந்து பல சிறார்களும், இளம் வீரர்களும் தேசிய மற்றும் சர்வதேச நிலைகளில் திகழத் தொடங்கியுள்ளனர். முல்லை CHESS சாம்பியன்ஷிப் 2025 அந்த வளர்ச்சியை மேலும் ஊக்குவித்து வலுப்படுத்தும் வகையில் இருந்தது.
-                </p>
-                
-                <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">சவால்களையும் கடந்து வெற்றி</h4>
-                
-                <p class="mb-6">
-                  போட்டியின் முழு காலமும், சதுரங்கத்தை நேசிக்கும் பெற்றோர்கள், மாணவர்கள், விளையாட்டு ஆர்வலர்கள் அனைவரும் தங்களது ஒற்றுமையையும் ஒத்துழைப்பையும் வெளிப்படுத்தினர். சில சிறிய சவால்கள் மற்றும் குறைபாடுகள் இருந்தபோதிலும், அனைவரின் அர்ப்பணிப்பு, உற்சாகம், பங்களிப்பு ஆகியவற்றின் மூலம் இந்த நிகழ்வு மிகச்சிறப்பாக நிறைவடைந்தது.
-                </p>
-                
-                <p class="mb-6">
-                  ஒவ்வொரு போட்டியாளரும் தங்களது திறமையைக் காட்டி, வெற்றிக்காக போராடிய தருணங்கள், சதுரங்கத்தின் அழகையும் மகத்துவத்தையும் அனைவருக்கும் உணர்த்தின. இந்தப் போட்டி, வெறும் ஒரு விளையாட்டு நிகழ்வு மட்டுமல்லாது, முல்லைத்தீவு மாவட்ட இளம் தலைமுறைக்கு அறிவு, ஒருமைப்பாடு மற்றும் போட்டித் திறன் வளர்ச்சிக்கான மேடையாக அமைந்தது.
-                </p>
-
-                <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">பெற்றோர்களின் மற்றும் சமூகத்தின் பங்கு</h4>
-                
-                <p class="mb-6">
-                  முல்லை CHESS சாம்பியன்ஷிப் 2025-ஐ வெற்றிகரமாக்குவதில் பெற்றோர்கள் மற்றும் சமூகத்தின் பங்கும் பெரிது. வீரர்களை ஊக்குவித்து பின்புலத்தில் உறுதுணையாக இருந்த பெற்றோர்கள், அயராத முயற்சியுடன் போட்டியை முன்னெடுத்த நலன் விரும்பிகள், அயராது உழைத்த தீர்ப்பாளர்கள் மற்றும் தன்னார்வலர்கள் அனைவரும் இந்த வெற்றியின் முக்கியக் காரணிகள் ஆகும்.
-                </p>
-                
-                <p class="mb-6">
-                  சதுரங்கம் குழந்தைகளுக்கு மனஅழுத்தம் குறைக்கும், நினைவாற்றலை அதிகரிக்கும், முடிவெடுக்கும் திறனை மேம்படுத்தும் திறன் கொண்ட விளையாட்டு என்பதையும், பெற்றோர்கள் புரிந்து கொண்டு அவர்களை ஊக்குவிப்பதும் இந்த வெற்றிக்கு ஒரு வலுவான அடித்தளம் அமைத்துள்ளது.
-                </p>
-
-                <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">MKCA – ஒரு முன்னோடி</h4>
-                
-                <p class="mb-6">
-                  Magical Knight Chess Academy (MKCA) முல்லைத்தீவு மாவட்டத்தில் சதுரங்கத்தை அடிப்படை நிலையிலிருந்து தேசிய அளவுக்கு கொண்டு செல்லும் பணியை செய்து வருகிறது. பயிற்சி முகாம்கள், சிறுவர் மேம்பாட்டு திட்டங்கள், இடைநிலை மற்றும் மேம்பட்ட வீரர்களுக்கான சிறப்பு வகுப்புகள் ஆகியவற்றின் மூலம் MKCA, மாவட்ட சதுரங்க வளர்ச்சிக்கு தொடர்ச்சியான பங்களிப்பை வழங்கி வருகிறது.
-                </p>
-                
-                <div class="bg-white/5 rounded-2xl p-6 mb-6">
-                  <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">முக்கிய பொறுப்பாளர்கள்</h4>
-                  <div class="grid md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <p><strong class="text-chess-accent">Organizers:</strong> Tharsikan, Dishanthan</p>
-                      <p><strong class="text-chess-accent">Director:</strong> Dishanthan</p>
-                      <p><strong class="text-chess-accent">Chief Arbiter:</strong> Tharsikan</p>
-                      <p><strong class="text-chess-accent">Computer Arbiter:</strong> Vinushan</p>
-                    </div>
-                    <div>
-                      <p><strong class="text-chess-accent">Arbiters:</strong></p>
-                      <p class="ml-4">Thuverakan, Dishanthiny, Tanujan, Sanujan, Abiraamy, Dilaxshi, Yathurshan, Kaanarasan, Kopith</p>
-                    </div>
-                  </div>
-                  <p class="mt-4 text-chess-light/80 text-sm">இவர்கள் அனைவரின் அர்ப்பணிப்பு, திட்டமிடல் மற்றும் உழைப்பு இல்லாமல் இந்நிகழ்வு இவ்வளவு வெற்றிகரமாக இருக்க முடியாது.</p>
-                </div>
-                
-                <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">எதிர்காலத்தின் கனவு</h4>
-                
-                <p class="mb-6">
-                  சதுரங்கம் ஒரு விளையாட்டாக மட்டுமல்லாது, மனத்திறன் மற்றும் குணநலன்களை வளர்க்கும் கல்வி கருவியாக MKCA பார்க்கிறது. முல்லை CHESS சாம்பியன்ஷிப் 2025 மூலம் உருவாகியுள்ள உற்சாகமும், புதிய திறமைகளும், முல்லைத்தீவை இலங்கையின் முன்னணி சதுரங்க மையமாக மாற்றும் கனவை நிச்சயம் உண்மையாக்கும் என நம்பப்படுகிறது.
-                </p>
-                
-                <p class="mb-6">
-                  இந்நிகழ்வு மூலம் பங்கேற்ற ஒவ்வொரு வீரரும் ஒரு நாள் தேசிய அல்லது சர்வதேச மேடைகளில் பிரபலமடைவார்கள் என்பது சந்தேகமில்லை. MKCA வருங்காலத்தில் மேலும் பல பயிற்சி முகாம்கள், கல்வி சார்ந்த செயல்முறைகள் மற்றும் தேசிய அளவிலான போட்டிகளை நடத்தும் திட்டங்களை உருவாக்கி வருகிறது.
-                </p>
-                
-                <div class="bg-chess-accent/10 border border-chess-accent/30 rounded-2xl p-6 mb-6">
-                  <h4 class="font-serif text-xl font-bold mb-4 text-chess-accent">முடிவுரை</h4>
-                  <p class="mb-4">
-                    முல்லை CHESS சாம்பியன்ஷிப் 2025 ஒரு போட்டியை விட அதிகமானது – இது ஒரு புதிய தலைமுறை சதுரங்க வீரர்களின் பிறப்பிடம். இதன் மூலம், முல்லைத்தீவு மாவட்டம் இலங்கையின் சதுரங்க வரைபடத்தில் தனித்துவமான இடத்தைப் பெற்றுள்ளது.
-                  </p>
-                  <p class="mb-4">
-                    Magical Knight Chess Academy தனது அர்ப்பணிப்பு, பார்வை மற்றும் திட்டமிடலின் மூலம் முல்லைத்தீவு சதுரங்க வரலாற்றை ஒரு புதிய உயரத்திற்கு கொண்டு சென்றுள்ளது.
-                  </p>
-                  <p class="text-chess-accent font-semibold">
-                    இந்நிகழ்வின் வெற்றி, ஒற்றுமை, உழைப்பு மற்றும் சமூகத்தின் பங்களிப்பு ஆகியவற்றின் சின்னமாகவும் திகழ்கிறது. இது, எதிர்கால தலைமுறைகளுக்கு ஒரு உற்சாகமும் ஊக்கமும் அளிக்கும் என்பதில் சந்தேகமில்லை.
-                  </p>
-                </div>
-              </div>
-              
-              <div class="text-center mt-6">
-                <button 
-                  id="toggle-blog-1" 
-                  class="bg-chess-accent text-gray-900 font-semibold px-6 py-3 rounded-md hover:bg-chess-accent-light transition-colors duration-300"
-                  onclick="toggleBlogPost(1)"
-                >
-                  Read More →
-                </button>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <!-- New Tournament Announcement: Magical Knight Classic Chess Tournament 2026 -->
-        <div class="mb-16">
-          <article class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 md:p-12 transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
-            <div class="text-center mb-8">
-              <div class="text-5xl mb-4">🏆</div>
-              <h3 class="font-serif text-2xl md:text-3xl font-bold mb-4 text-chess-light">
-                MAGICAL KNIGHT CLASSIC Chess Tournament 2026
-              </h3>
-              <div class="flex items-center justify-center text-sm text-chess-gray mb-4 flex-wrap gap-2">
-                <span>April 1, 2026 (Wednesday)</span>
-                <span class="mx-1">•</span>
-                <span>Provincial Level – Northern Players Only</span>
-                <span class="mx-1">•</span>
-                <span>Announcement</span>
-              </div>
-              <div class="inline-block bg-chess-accent text-gray-900 px-4 py-2 rounded-full text-sm font-semibold mb-2">
-                New Tournament
+              <div class="inline-block bg-chess-950 px-6 py-3 rounded-xl border border-chess-700 w-full text-center sm:text-left sm:w-auto mt-2">
+                பதிவுகட்டணம்: <span class="text-2xl font-bold text-white ml-2">Rs. 1000/-</span>
               </div>
             </div>
 
-            <div class="prose prose-invert max-w-none text-chess-light/90 leading-relaxed space-y-4">
-              <h4 class="font-serif text-xl font-bold text-chess-accent">தமிழில் அறிவிப்பு</h4>
-              <p>
-                வடமாகாண சதுரங்க வீரர்களுக்கான மாபெரும் சதுரங்க சுற்றுப்போட்டி தொடர்பானது....
-              </p>
-              <p>
-                வருகின்ற 2026.04.01ம் திகதி (புதன்கிழமை) MAGICAL KNIGHT CHESS ACADEMY இனால் வடமாகண சதுரங்க வீரர்களை மாத்திரம் உள்ளடக்கிய
-                <span class="font-semibold">MAGICAL KNIGHT CLASSIC சதுரங்க போட்டியானது</span> நடைபெற உள்ளது. இந்த போட்டிகள் கிளி/கிளிநொச்சி மகா வித்தியாலயத்தில் காலை 8.30 மணிக்கு ஆரம்பமாகும்.
-              </p>
-              <p>
-                போட்டிகள் ஆனது 6 வயது, 8 வயது, 10 வயது, 12 வயது, 14 வயதின் கீழ் ஆண்கள், பெண்கள் மற்றும் 14 வயதின் மேல் ஆண்கள், பெண்கள் என வயது பிரிவுகளை உள்ளடக்கியதாக நடைபெற உள்ளது.
-                அது தவிர பெற்றோர்களுக்கான சதுரங்க போட்டிகளும் நடைபெற உள்ளது.
-              </p>
-              <p>
-                ஒவ்வொரு வயது பிரிவிலும் 15 வெற்றியாளர்கள் என 225 வெற்றியாளர்கள் தெரிவு செய்யப்பட்டு வெற்றிக்கிண்ணம், வெற்றிபதக்கம், வெற்றிசான்றிதழ் வழங்கி வைக்கப்படும்.
-                போட்டியில் பங்குபற்றும் அனைவருக்கும் பங்குபற்றுதல் சான்றிதழ் வழங்கிவைக்கப்படும்.
-              </p>
-              <p>
-                போட்டிகளுக்கான பதிவுகட்டணம் <span class="font-semibold">Rs. 1000/-</span>.
-              </p>
-
-              <div class="bg-white/5 rounded-2xl p-4 space-y-3 text-sm">
-                <p class="font-semibold text-chess-accent">போட்டிகளுக்கான குழுமத்தில் இணைவதற்கு (WhatsApp Group):</p>
-                <p>
-                  <a href="https://chat.whatsapp.com/FDmyZ3aIyO6JkM67TVJZ6t?mode=gi_t" target="_blank" class="text-chess-accent hover:text-chess-accent-light underline">
-                    WhatsApp குழு இணைப்பு
-                  </a>
-                </p>
-                <p class="font-semibold text-chess-accent">போட்டிகளுக்கான பதிவுகளை மேற்கொள்ள (Google Form):</p>
-                <p>
-                  <a href="https://docs.google.com/forms/d/e/1FAIpQLSfVslF3X-SlvlaXh2MDXf9yGmlXu-yPIR23mtNhusEAguwq5Q/viewform?usp=header" target="_blank" class="text-chess-accent hover:text-chess-accent-light underline">
-                    Registration Google Form
-                  </a>
-                </p>
-                <p class="font-semibold text-chess-accent">போட்டிகள் நடைபெறும் இடத்தினை (Location – Google Maps):</p>
-                <p>
-                  <a href="https://maps.app.goo.gl/dcpZejA6bcFdtbQq5" target="_blank" class="text-chess-accent hover:text-chess-accent-light underline">
-                    Kilinochchi Maha Vidyalayam – Location
-                  </a>
-                </p>
-              </div>
-
-              <p>
-                மாணவர்களுக்கான போட்டிகளினை மாகாணரீதியில் கொண்டு செல்வதே எமது நோக்கம். அனைவரையும் அன்புடன் அழைத்து நிற்கிறோம்.
-              </p>
-
-              <p>
-                போட்டிகள் தொடர்பான மேலதிக தகவல்களை <span class="font-semibold">www.mkca.live</span> இணையதளத்தின் ஊடாக சென்று பார்வையிட முடியும்.
-              </p>
-
-              <p class="text-sm text-chess-light/80">
-                0753175528 / 0775273514 / 0771424880 / 0779465344 – MAGICAL KNIGHT CHESS ACADEMY, Kilinochchi
-              </p>
-
-              <hr class="border-chess-accent/30 my-6" />
-
-              <h4 class="font-serif text-xl font-bold text-chess-accent">Announcement in English</h4>
-              <p>
-                A grand provincial-level chess tournament exclusively for Northern Province chess players – the
-                <span class="font-semibold">Magical Knight Classic Chess Tournament 2026</span> – will be organized by Magical Knight Chess Academy
-                on <span class="font-semibold">01st April 2026 (Wednesday)</span> at Kilinochchi Maha Vidyalayam, starting at 8.30 AM.
-              </p>
-              <p>
-                The tournament is open for boys and girls in the following age categories: Under 6, Under 8, Under 10, Under 12, Under 14, and Above 14.
-                In addition, there will be a special chess event for parents.
-              </p>
-              <p>
-                A total of <span class="font-semibold">225 winners</span> (15 winners from each age group) will be selected and awarded trophies, medals and certificates.
-                All participants will receive a participation certificate.
-              </p>
-              <p>
-                The registration fee for the tournament is <span class="font-semibold">Rs. 1000/-</span> per participant.
-              </p>
-
-              <div class="bg-white/5 rounded-2xl p-4 text-sm space-y-2">
-                <p class="font-semibold text-chess-accent">Quick Links:</p>
-                <ul class="list-disc list-inside space-y-1">
-                  <li>
-                    WhatsApp Group:
-                    <a href="https://chat.whatsapp.com/FDmyZ3aIyO6JkM67TVJZ6t?mode=gi_t" target="_blank" class="text-chess-accent hover:text-chess-accent-light underline">
-                      Join Tournament Group
-                    </a>
-                  </li>
-                  <li>
-                    Registration Form:
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfVslF3X-SlvlaXh2MDXf9yGmlXu-yPIR23mtNhusEAguwq5Q/viewform?usp=header" target="_blank" class="text-chess-accent hover:text-chess-accent-light underline">
-                      Submit Your Entry
-                    </a>
-                  </li>
-                  <li>
-                    Venue Location:
-                    <a href="https://maps.app.goo.gl/dcpZejA6bcFdtbQq5" target="_blank" class="text-chess-accent hover:text-chess-accent-light underline">
-                      View on Google Maps
-                    </a>
-                  </li>
-                </ul>
-              </div>
-
-              <div class="text-center mt-6">
-                <a
-                  href="./pdf/ᴍᴀɢɪᴄᴀʟ ᴋɴɪɢʜᴛ ᴄʟᴀꜱꜱɪᴄ ᴄʜᴇꜱꜱ ᴛᴏᴜʀɴᴀᴍᴇɴᴛ 2026.pdf"
-                  target="_blank"
-                  class="inline-flex items-center justify-center gap-2 bg-chess-accent text-gray-900 font-semibold px-6 py-3 rounded-md hover:bg-chess-accent-light transition-colors duration-300"
-                >
-                  <i class="fas fa-file-pdf"></i>
-                  Download Tournament PDF
-                </a>
+            <!-- English Tab -->
+            <div id="english-tab" class="tab-content text-slate-300 text-lg leading-relaxed space-y-5">
+               <p class="font-medium text-white border-l-4 border-chess-blue pl-4">A grand provincial-level chess tournament exclusively for Northern Province chess players.</p>
+              
+               <p>The <strong class="text-white">Magical Knight Classic Chess Tournament 2026</strong> will be officially organized by the Magical Knight Chess Academy on <span class="text-chess-blue font-bold">01st April 2026 (Wednesday)</span> at Kilinochchi Maha Vidyalayam, starting sharp at 8.30 AM.</p>
+               
+               <p>The tournament features categories for boys and girls: Under 6, 8, 10, 12, 14, and Above 14. Additionally, we are hosting a special chess event exclusively for parents to participate!</p>
+               
+               <p>A massive total of <span class="text-chess-blue font-bold">225 winners</span> (15 from each age group) will be awarded prestigious trophies, medals, and certificates. Every participant walks away with a guaranteed participation certificate.</p>
+               
+               <div class="inline-block bg-chess-950 px-6 py-3 rounded-xl border border-chess-700 w-full text-center sm:text-left sm:w-auto mt-2">
+                Registration Fee: <span class="text-2xl font-bold text-white ml-2">Rs. 1000/-</span>
               </div>
             </div>
-          </article>
-        </div>
-      
-        
-        <!-- 
-        ===============================================
-        TEMPLATE FOR ADDING NEW BLOG POSTS
-        ===============================================
-        
-        TO ADD A NEW FEATURED BLOG POST (Full Width):
-        1. Replace the existing featured post section with new content
-        2. Update the blog post ID numbers in both content div and button
-        3. Add the toggle function call with new ID
-        
-        TO ADD A NEW REGULAR BLOG POST (Grid Item):
-        Copy this template and add it to the grid:
-        
-        <article class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
-          <div class="text-4xl mb-4 text-center">[CHESS PIECE EMOJI]</div>
-          <h3 class="font-serif text-xl font-bold mb-3 text-chess-light">[BLOG TITLE]</h3>
-          <p class="text-chess-light/80 text-sm leading-relaxed mb-4">
-            [BLOG EXCERPT/SUMMARY...]
-          </p>
-          <div class="flex items-center justify-between text-xs text-chess-gray mb-4">
-            <span>[DATE]</span>
-            <span>[READ TIME]</span>
-          </div>
-          <button class="text-chess-accent hover:text-chess-accent-light font-semibold">Read More →</button>
-        </article>
-        
-        Chess Piece Options: ♛ ♜ ♝ ♞ ♟ ♚ 🏆 ⭐ 🎯 📚 💡 🎉
-        
-        FOR EXPANDABLE BLOG POSTS:
-        1. Add unique ID to content div: id="blog-content-[NUMBER]"
-        2. Add unique ID to button: id="toggle-blog-[NUMBER]"  
-        3. Use onclick="toggleBlogPost([NUMBER])" on button
-        4. Structure content with hidden div for full content
-        
-        ===============================================
-        -->
-      </div>
-    </section>
 
-    <!-- Categories Section -->
-    <section id="categories" class="relative z-10 py-20 px-4">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="font-serif text-3xl md:text-4xl font-bold text-center mb-12 bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
-          Blog Categories
-        </h2>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
-            <div class="text-3xl mb-3 text-chess-accent"><i class="fas fa-lightbulb"></i></div>
-            <h3 class="font-serif text-lg font-bold mb-2 text-chess-light">Strategy & Tactics</h3>
-            <p class="text-chess-light/80 text-sm">Advanced chess concepts and strategic thinking</p>
-          </div>
-          
-          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
-            <div class="text-3xl mb-3 text-chess-accent"><i class="fas fa-trophy"></i></div>
-            <h3 class="font-serif text-lg font-bold mb-2 text-chess-light">Tournaments</h3>
-            <p class="text-chess-light/80 text-sm">Tournament reports and preparation guides</p>
-          </div>
-          
-          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
-            <div class="text-3xl mb-3 text-chess-accent"><i class="fas fa-graduation-cap"></i></div>
-            <h3 class="font-serif text-lg font-bold mb-2 text-chess-light">Learning</h3>
-            <p class="text-chess-light/80 text-sm">Educational content for all skill levels</p>
-          </div>
-          
-          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
-            <div class="text-3xl mb-3 text-chess-accent"><i class="fas fa-users"></i></div>
-            <h3 class="font-serif text-lg font-bold mb-2 text-chess-light">Academy News</h3>
-            <p class="text-chess-light/80 text-sm">Updates and stories from MKCA</p>
-          </div>
-        </div>
-      </div>
-    </section>
+            <hr class="border-chess-700/60 my-8"/>
 
-
-    <!-- Quote Section -->
-    <section class="relative z-10 py-20 px-4">
-      <div class="max-w-4xl mx-auto text-center">
-        <div class="bg-white/15 backdrop-blur-2xl border border-white/30 rounded-3xl p-12 transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
-          <blockquote class="text-2xl md:text-3xl font-serif italic text-chess-light/90 mb-6">
-            "Every chess master was once a beginner."
-          </blockquote>
-          <cite class="text-chess-accent font-semibold">— Irving Chernev</cite>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact" class="relative z-10 w-full py-12 px-4 mt-20">
-      <div class="max-w-6xl mx-auto">
-        <div class="bg-white/15 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 md:p-12">
-          <div class="grid md:grid-cols-3 gap-8 mb-8">
-            <div class="text-center md:text-left">
-              <h3 class="font-serif text-2xl font-bold text-chess-accent mb-4 flex items-center justify-center md:justify-start">
-                <i class="fas fa-chess-knight mr-2"></i>
-                Magical Knight Chess Academy
-              </h3>
-              <p class="text-chess-light/80">Elevating minds through the royal game of chess.</p>
-            </div>
-            <div class="hidden md:block"></div>
-            <div class="text-center md:text-right">
-              <h4 class="font-semibold text-chess-light mb-4">Contact Info</h4>
-              <div class="text-chess-light/80 space-y-2">
-                <div class="flex items-center justify-center md:justify-end">
-                  <i class="fas fa-phone mr-2 text-chess-accent"></i>
-                  <span>+94 75 317 5528 – Tharsikan.V</span>
-                </div>
-                <div class="flex items-center justify-center md:justify-end">
-                  <i class="fas fa-phone mr-2 text-chess-accent"></i>
-                  <span>+94 77 527 3514 – Dishanthan.V</span>
-                </div>
-              </div>
-              <h4 class="font-semibold text-chess-light mb-4 mt-6">Follow Us</h4>
-              <div class="text-chess-light/80">
-                <a
-                  href="https://web.facebook.com/magicalknightchessacademykilinochchi"
-                  class="flex items-center justify-center md:justify-end hover:text-chess-accent transition-all duration-300"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i class="fab fa-facebook-f mr-2 text-chess-accent"></i>
-                  <span>Magical Knight Chess Academy</span>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="border-t border-chess-accent/20 pt-8 text-center">
-            <p class="text-chess-light/70 mb-4">© 2025 Senzura codeLabs. All rights reserved.</p>
-            <p class="text-chess-light/60">
-              Crafted with
-              <span class="text-red-500 animate-pulse">❤</span> by
-              <a
-                href="https://www.linkedin.com/in/thuverakan10/"
-                class="text-chess-accent hover:text-chess-accent-light transition-all duration-300 underline underline-offset-2 hover:underline-offset-4 ml-1"
-              >
-                <i class="fab fa-github mr-1"></i>Senzura codeLabs
+            <!-- Action Buttons Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <a href="https://chat.whatsapp.com/FDmyZ3aIyO6JkM67TVJZ6t?mode=gi_t" target="_blank" class="flex flex-col items-center justify-center p-4 rounded-xl bg-[#25D366]/10 border border-[#25D366]/30 text-white hover:bg-[#25D366] hover:text-chess-950 transition-all duration-300 group">
+                <i class="fab fa-whatsapp text-3xl text-[#25D366] group-hover:text-chess-950 mb-2"></i>
+                <span class="font-semibold text-sm">Join WhatsApp</span>
               </a>
-            </p>
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSfVslF3X-SlvlaXh2MDXf9yGmlXu-yPIR23mtNhusEAguwq5Q/viewform?usp=header" target="_blank" class="flex flex-col items-center justify-center p-4 rounded-xl bg-chess-blue/10 border border-chess-blue/30 text-white hover:bg-chess-blue hover:text-chess-950 transition-all duration-300 group">
+                <i class="fas fa-file-signature text-3xl text-chess-blue group-hover:text-chess-950 mb-2"></i>
+                <span class="font-semibold text-sm">Register Form</span>
+              </a>
+              <a href="https://maps.app.goo.gl/dcpZejA6bcFdtbQq5" target="_blank" class="flex flex-col items-center justify-center p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-white hover:bg-red-500 hover:text-chess-950 transition-all duration-300 group sm:col-span-2 lg:col-span-1">
+                <i class="fas fa-map-marked-alt text-3xl text-red-500 group-hover:text-chess-950 mb-2"></i>
+                <span class="font-semibold text-sm">View Location</span>
+              </a>
+            </div>
+
           </div>
         </div>
-      </div>
-    </footer>
-
-    <!-- Image Modal -->
-    <div id="imageModal" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden z-[1000]" onclick="closeModal()">
-      <div class="relative max-w-4xl max-h-[90vh] p-4">
-        <img id="modalImage" src="" alt="Enlarged Image" class="max-w-full max-h-[90vh] rounded-lg shadow-lg" onclick="event.stopPropagation()" />
-        <button class="absolute top-2 right-2 text-white text-4xl font-bold bg-black/50 rounded-full w-12 h-12 flex items-center justify-center hover:bg-black/70 transition-colors duration-300" onclick="closeModal()" aria-label="Close Modal">×</button>
+        
       </div>
     </div>
+  </main>
 
-    <!-- Back to Top Button -->
-    <button id="backToTop" class="fixed bottom-8 right-8 z-30 bg-white/15 backdrop-blur-2xl border border-white/30 rounded-full p-4 text-chess-accent hover:text-chess-accent-light transition-all duration-300 opacity-0 pointer-events-none hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
-      <i class="fas fa-chevron-up text-xl"></i>
-    </button>
+  <!-- Categories / Bento Box Layout -->
+  <section class="max-w-7xl mx-auto px-4 mb-32 z-10 relative">
+    <div class="text-center mb-16">
+      <h2 class="font-heading text-3xl md:text-5xl font-bold mb-4">Explore More <span class="text-gradient-blue">Content</span></h2>
+      <p class="text-slate-400 max-w-2xl mx-auto">Dive deep into chess strategies, academy news, and historical tournaments.</p>
+    </div>
 
-    <!-- Scripts -->
-    <script>
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener("click", function (e) {
-          e.preventDefault();
-          const target = document.querySelector(this.getAttribute("href"));
-          if (target) {
-            target.scrollIntoView({
-              behavior: "smooth",
-              block: "start",
-            });
-            const mobileMenu = document.getElementById("mobile-menu");
-            const menuButton = document.getElementById("menu-button");
-            if (!mobileMenu.classList.contains("translate-x-full")) {
-              mobileMenu.classList.add("translate-x-full");
-              menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
-              setTimeout(() => {
-                mobileMenu.classList.add("hidden");
-              }, 300);
-            }
-          }
-        });
-      });
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Card 1 -->
+      <a href="#" class="glass-card p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(59,130,246,0.15)] hover:border-chess-blue/50">
+        <div class="w-14 h-14 bg-chess-950 rounded-2xl flex items-center justify-center text-2xl text-chess-blue mb-6 group-hover:scale-110 transition-transform"><i class="fas fa-chess-knight"></i></div>
+        <h3 class="font-heading text-2xl font-bold text-white mb-2">Strategy & Tactics</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Advanced chess concepts, opening repertoires, and middle-game planning.</p>
+      </a>
+      <!-- Card 2 -->
+      <a href="./tournaments.html" class="glass-card p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(245,158,11,0.15)] hover:border-chess-accent/50 lg:translate-y-4">
+        <div class="w-14 h-14 bg-chess-950 rounded-2xl flex items-center justify-center text-2xl text-chess-accent mb-6 group-hover:scale-110 transition-transform"><i class="fas fa-trophy"></i></div>
+        <h3 class="font-heading text-2xl font-bold text-white mb-2">Tournaments</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Tournament reports, upcoming schedules, and preparation guides.</p>
+      </a>
+      <!-- Card 3 -->
+      <a href="#" class="glass-card p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(168,85,247,0.15)] hover:border-purple-500/50">
+        <div class="w-14 h-14 bg-chess-950 rounded-2xl flex items-center justify-center text-2xl text-purple-400 mb-6 group-hover:scale-110 transition-transform"><i class="fas fa-graduation-cap"></i></div>
+        <h3 class="font-heading text-2xl font-bold text-white mb-2">Learning Path</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Structured educational content for beginners to grandmasters.</p>
+      </a>
+      <!-- Card 4 -->
+      <a href="#" class="glass-card p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(34,197,94,0.15)] hover:border-green-500/50 lg:translate-y-4">
+        <div class="w-14 h-14 bg-chess-950 rounded-2xl flex items-center justify-center text-2xl text-green-400 mb-6 group-hover:scale-110 transition-transform"><i class="fas fa-users"></i></div>
+        <h3 class="font-heading text-2xl font-bold text-white mb-2">Academy News</h3>
+        <p class="text-slate-400 text-sm leading-relaxed">Updates, player achievements, and daily stories from MKCA.</p>
+      </a>
+    </div>
+  </section>
 
-      const backToTopButton = document.getElementById("backToTop");
-      window.addEventListener("scroll", () => {
-        if (window.pageYOffset > 300) {
-          backToTopButton.style.opacity = "1";
-          backToTopButton.style.pointerEvents = "auto";
-        } else {
-          backToTopButton.style.opacity = "0";
-          backToTopButton.style.pointerEvents = "none";
-        }
-      });
+  <!-- Past Event Spotlight: MCC 2025 -->
+  <section class="max-w-7xl mx-auto px-4 mb-32 z-10 relative">
+    <div class="flex items-center justify-between mb-12">
+      <h2 class="font-heading text-3xl md:text-5xl font-bold text-white">Event <span class="text-slate-500">Spotlight</span></h2>
+      <div class="bg-white/5 border border-white/10 px-4 py-2 rounded-full text-xs font-semibold tracking-wider text-slate-300">COMPLETED EVENT</div>
+    </div>
 
-      backToTopButton.addEventListener("click", () => {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-      });
+    <!-- Editorial Layout for MCC 2025 -->
+    <div class="glass-card rounded-[2.5rem] overflow-hidden group border-slate-700/50">
+      <div class="grid lg:grid-cols-2">
+        <!-- Image Banner Side -->
+        <div class="relative overflow-hidden min-h-[400px] lg:min-h-full">
+          <img src="./blog/mcc25/mcc25.webp" alt="Mullai Chess Championship" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700" />
+          <div class="absolute inset-0 bg-gradient-to-t from-chess-950 via-chess-950/40 to-transparent lg:bg-gradient-to-r"></div>
+        </div>
 
-      // Blog post toggle functionality
-      function toggleBlogPost(postId) {
-        const content = document.getElementById(`blog-content-${postId}`);
-        const button = document.getElementById(`toggle-blog-${postId}`);
+        <!-- Content Side -->
+        <div class="p-8 md:p-12 lg:p-16 flex flex-col justify-center relative bg-chess-900/40">
+          <p class="text-sm font-semibold tracking-widest text-chess-accent uppercase mb-3">Historical Milestone</p>
+          <h3 class="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+            முல்லை CHESS <br>சாம்பியன்ஷிப் 2025
+          </h3>
+          <p class="text-slate-300 text-lg mb-8 leading-relaxed">
+            முல்லைத்தீவு மாவட்டத்தின் சதுரங்க வரலாற்றில் புதிய பொற்காலத்தை உருவாக்கிய ஒரு பெரும் நிகழ்வாக, <strong class="text-white">Magical Knight Chess Academy (MKCA)</strong> பெருமையுடன் நடத்திய முல்லை CHESS சாம்பியன்ஷிப் 2025 மிகுந்த சிறப்புடனும் வெற்றிகரமாகவும் நிறைவடைந்துள்ளது. இது மாவட்ட சதுரங்க வளர்ச்சிக்கு ஒரு மைல்கல்!
+          </p>
+
+          <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="bg-chess-950/60 rounded-2xl p-5 border border-slate-700/50">
+              <div class="text-3xl font-heading font-black text-white mb-1">350+</div>
+              <div class="text-sm text-slate-400">திறமையான வீரர்கள் களம் கண்டனர்</div>
+            </div>
+            <div class="bg-chess-950/60 rounded-2xl p-5 border border-slate-700/50">
+              <div class="text-3xl font-heading font-black text-white mb-1">4+</div>
+              <div class="text-sm text-slate-400">ஊடகங்களில் நேரடி கவரேஜ்</div>
+            </div>
+          </div>
+
+          <!-- Video Carousel / Grid Mini -->
+          <div class="space-y-4">
+            <h4 class="font-heading text-xl font-bold text-white flex items-center gap-2">
+              <i class="fas fa-video text-chess-accent"></i> Media Coverage
+            </h4>
+            <div class="grid grid-cols-3 gap-3">
+               <!-- Thumbnail representations of the videos pointing to links -->
+               <div class="aspect-video bg-chess-950 rounded-xl overflow-hidden relative group/vid cursor-pointer border border-slate-700">
+                  <div class="absolute inset-0 bg-chess-blue/20 flex items-center justify-center opacity-0 group-hover/vid:opacity-100 transition-opacity z-10"><i class="fas fa-play text-white text-2xl drop-shadow-md"></i></div>
+                  <video src="./blog/mcc25/mediaclip/MullaiMedia.mp4" class="w-full h-full object-cover opacity-70"></video>
+               </div>
+               <div class="aspect-video bg-chess-950 rounded-xl overflow-hidden relative group/vid cursor-pointer border border-slate-700">
+                  <div class="absolute inset-0 bg-chess-blue/20 flex items-center justify-center opacity-0 group-hover/vid:opacity-100 transition-opacity z-10"><i class="fas fa-play text-white text-2xl drop-shadow-md"></i></div>
+                  <video src="./blog/mcc25/mediaclip/DanNews.mp4" class="w-full h-full object-cover opacity-70"></video>
+               </div>
+               <div class="aspect-video bg-chess-950 rounded-xl overflow-hidden relative group/vid cursor-pointer border border-slate-700 text-center flex flex-col items-center justify-center bg-gradient-to-br from-slate-800 to-chess-950">
+                  <i class="fas fa-images text-2xl text-slate-400 mb-1"></i>
+                  <span class="text-xs text-slate-400 font-medium">More Photos</span>
+               </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quote Section -->
+  <section class="max-w-4xl mx-auto px-4 text-center mb-32 z-10 relative">
+    <i class="fas fa-quote-left text-5xl text-chess-accent/20 mb-6"></i>
+    <h2 class="font-heading text-3xl md:text-5xl font-black text-white leading-tight mb-6">
+      "Every chess master was once a beginner."
+    </h2>
+    <p class="text-xl text-slate-400 font-serif italic">— Irving Chernev</p>
+  </section>
+
+  <!-- Premium Footer -->
+  <footer class="border-t border-slate-800 bg-chess-950 relative overflow-hidden z-10">
+    <div class="max-w-7xl mx-auto px-4 py-16 sm:py-24">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
         
-        if (content.classList.contains('hidden')) {
-          content.classList.remove('hidden');
-          button.textContent = '← Read Less';
-        } else {
-          content.classList.add('hidden');
-          button.textContent = 'Read More →';
-        }
-      }
+        <div class="lg:col-span-2">
+          <a href="#" class="flex items-center gap-3 mb-6">
+            <img src="./logo-photoaidcom-cropped.jpg" alt="MKCA Logo" class="w-12 h-12 rounded-full object-cover" />
+            <span class="font-heading font-bold text-2xl text-white">MKCA</span>
+          </a>
+          <p class="text-slate-400 leading-relaxed max-w-sm">
+            Elevating minds through the royal game of chess. Building the next generation of grandmasters in the Northern Province.
+          </p>
+        </div>
 
-      // Image modal functionality
-      function openModal(src) {
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("modalImage");
-        modalImg.src = src;
-        modal.classList.remove("hidden");
-        document.body.classList.add("overflow-hidden");
-      }
+        <div>
+          <h4 class="font-heading text-lg font-bold text-white mb-6">Quick Links</h4>
+          <ul class="space-y-4">
+            <li><a href="./index.html" class="text-slate-400 hover:text-chess-accent transition-colors">Home</a></li>
+            <li><a href="./tournaments.html" class="text-slate-400 hover:text-chess-accent transition-colors">Tournaments</a></li>
+            <li><a href="./rplayels.html" class="text-slate-400 hover:text-chess-accent transition-colors">Rated Players</a></li>
+            <li><a href="./blog.html" class="text-slate-400 hover:text-chess-accent transition-colors">Blog</a></li>
+          </ul>
+        </div>
 
-      function closeModal() {
-        const modal = document.getElementById("imageModal");
-        modal.classList.add("hidden");
-        document.body.classList.remove("overflow-hidden");
-      }
+        <div>
+          <h4 class="font-heading text-lg font-bold text-white mb-6">Contact Us</h4>
+          <ul class="space-y-4 text-slate-400">
+            <li class="flex items-center gap-3"><i class="fas fa-phone text-chess-accent"></i> +94 75 317 5528 (Tharsikan.V)</li>
+            <li class="flex items-center gap-3"><i class="fas fa-phone text-chess-accent"></i> +94 77 527 3514 (Dishanthan.V)</li>
+            <li class="pt-2">
+              <a href="https://web.facebook.com/magicalknightchessacademykilinochchi" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-[#1877F2] transition-colors">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-      // Close modal on escape key
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && !document.getElementById("imageModal").classList.contains("hidden")) {
-          closeModal();
-        }
+      <div class="mt-16 pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-slate-500 text-sm">© 2026 MKCA. All rights reserved.</p>
+        <p class="text-slate-500 text-sm flex items-center gap-1">
+          Crafted with <i class="fas fa-heart text-red-500 animate-pulse"></i> by 
+          <a href="https://www.senzura.tech/" target="_blank" class="text-slate-300 hover:text-white hover:underline underline-offset-4 ml-1">
+            Senzura codeLabs
+          </a>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Tab Switcher for 2026 Poster
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => {
+        el.classList.remove('bg-chess-accent', 'text-chess-950', 'font-bold');
+        el.classList.add('text-slate-400', 'font-medium');
       });
+      
+      document.getElementById(tabId).classList.add('active');
+      const activeBtn = document.getElementById('btn-' + tabId);
+      activeBtn.classList.remove('text-slate-400', 'font-medium');
+      activeBtn.classList.add('bg-chess-accent', 'text-chess-950', 'font-bold');
+    }
 
-      // Make functions globally available
-      window.toggleBlogPost = toggleBlogPost;
-      window.openModal = openModal;
-      window.closeModal = closeModal;
+    // Mobile Menu Toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let isMenuOpen = false;
 
-      // Newsletter form submission
-      const newsletterForm = document.querySelector("form");
-      if (newsletterForm) {
-        newsletterForm.addEventListener("submit", function (e) {
-          e.preventDefault();
-          const email = this.querySelector('input[type="email"]').value;
-          const button = this.querySelector("button");
-          const originalText = button.textContent;
-          button.textContent = "Subscribed!";
-          button.classList.add("bg-gradient-to-r", "from-green-600", "to-teal-500");
-
-          setTimeout(() => {
-            button.textContent = originalText;
-            button.classList.remove("bg-gradient-to-r", "from-green-600", "to-teal-500");
-            this.reset();
-          }, 2000);
-        });
+    menuBtn.addEventListener('click', () => {
+      isMenuOpen = !isMenuOpen;
+      if (isMenuOpen) {
+        mobileMenu.classList.remove('mobile-menu-closed');
+        mobileMenu.classList.add('mobile-menu-open');
+        menuBtn.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+      } else {
+        mobileMenu.classList.remove('mobile-menu-open');
+        mobileMenu.classList.add('mobile-menu-closed');
+        menuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
       }
+    });
 
-      window.addEventListener("load", () => {
-        document.body.classList.add("loaded");
+    // Close menu when clicking links
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        isMenuOpen = false;
+        mobileMenu.classList.remove('mobile-menu-open');
+        mobileMenu.classList.add('mobile-menu-closed');
+        menuBtn.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>

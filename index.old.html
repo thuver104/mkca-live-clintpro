@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MKCA</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&family=Noto+Serif:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['"Noto Serif"', "serif"],
+              sans: ['"Noto Sans"', "sans-serif"],
+            },
+            colors: {
+              "chess-dark": "#0a0a0a",
+              "chess-darker": "#050505",
+              "chess-accent": "#d4af37",
+              "chess-accent-light": "#f4d03f",
+              "chess-light": "#f8f9fa",
+              "chess-gray": "#6c757d",
+              "chess-blue": "#4a90e2",
+            },
+            backgroundImage: {
+              hero: "url('https://images.unsplash.com/photo-1529699211952-734e80c4d42b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')",
+              "chess-pattern":
+                'url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Crect width="30" height="30"/%3E%3Crect x="30" y="30" width="30" height="30"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')',
+            },
+            animation: {
+              float: "float 6s ease-in-out infinite",
+              glow: "glow 2s ease-in-out infinite alternate",
+              "slide-up": "slideUp 0.8s ease-out",
+              "fade-in": "fadeIn 1s ease-out",
+              "bounce-slow": "bounce 3s infinite",
+            },
+            keyframes: {
+              float: {
+                "0%, 100%": { transform: "translateY(0px)" },
+                "50%": { transform: "translateY(-20px)" },
+              },
+              glow: {
+                "0%": { boxShadow: "0 0 15px rgba(212, 175, 55, 0.5)" },
+                "100%": { boxShadow: "0 0 25px rgba(212, 175, 55, 0.8)" },
+              },
+              slideUp: {
+                "0%": { transform: "translateY(50px)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const menuButton = document.getElementById("menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        // Toggle mobile menu
+        menuButton.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const isCurrentlyOpen = !mobileMenu.classList.contains("translate-x-full");
+          
+          if (isCurrentlyOpen) {
+            // Close menu
+            mobileMenu.classList.add("translate-x-full");
+            menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            setTimeout(() => {
+              mobileMenu.classList.add("hidden");
+            }, 300);
+          } else {
+            // Open menu
+            mobileMenu.classList.remove("hidden");
+            setTimeout(() => {
+              mobileMenu.classList.remove("translate-x-full");
+            }, 10);
+            menuButton.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+          }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener("click", (e) => {
+          if (
+            !mobileMenu.contains(e.target) &&
+            !menuButton.contains(e.target) &&
+            !mobileMenu.classList.contains("translate-x-full")
+          ) {
+            mobileMenu.classList.add("translate-x-full");
+            menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            setTimeout(() => {
+              mobileMenu.classList.add("hidden");
+            }, 300);
+          }
+        });
+
+        // Close menu when clicking a link inside the menu
+        mobileMenu.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            mobileMenu.classList.add("translate-x-full");
+            menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            setTimeout(() => {
+              mobileMenu.classList.add("hidden");
+            }, 300);
+          });
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const now = new Date();
+        const hours = now.getHours();
+
+        const messageElement = document.getElementById("academy-message");
+
+        if (hours >= 8 && hours < 21) {
+          messageElement.textContent = "Academy doors are open!";
+        } else {
+          messageElement.textContent =
+            "We're done for the day. Catch you tomorrow!";
+        }
+      });
+
+      function openModal(src) {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        modalImg.src = src;
+        modal.classList.remove("hidden");
+        document.body.classList.add("modal-open");
+        modal.style.zIndex = "1000";
+        modalImg.style.zIndex = "1001";
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("imageModal");
+        modal.classList.add("hidden");
+        document.body.classList.remove("modal-open");
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.key === "Escape" &&
+          !document.getElementById("imageModal").classList.contains("hidden")
+        ) {
+          closeModal();
+        }
+      });
+    </script>
+  </head>
+  <body class="bg-chess-dark text-chess-light font-sans overflow-x-hidden">
+    <!-- Floating Chess Pieces Background -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 10%; left: 10%">♛</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 20%; right: 15%; animation-delay: -2s">♜</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 60%; left: 5%; animation-delay: -4s">♝</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 70%; right: 10%">♞</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 40%; left: 80%">♟</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 80%; left: 70%">♚</div>
+    </div>
+
+    <!-- Hero Background with Enhanced Overlay -->
+    <div class="fixed inset-0 bg-hero bg-cover bg-center bg-no-repeat">
+      <div class="absolute inset-0 bg-gradient-to-br from-chess-darker via-chess-dark to-chess-darker opacity-85"></div>
+      <div class="absolute inset-0 bg-chess-pattern"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-40 w-full px-4 py-4 bg-chess-dark/40 backdrop-blur-2xl border-b border-white/10">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="font-serif font-bold text-xl text-chess-accent flex items-center space-x-2">
+          <img src="./logo-photoaidcom-cropped.jpg" alt="MKCA Logo" class="w-8 h-8 object-contain" />
+          <span>MKCA</span>
+        </div>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-6 items-center">
+          <a href="#" class="hover:text-chess-accent transition-colors duration-300">Home</a>
+          <a href="#coach" class="hover:text-chess-accent transition-colors duration-300">Coaches</a>
+          <a href="./tournaments.html" class="hover:text-chess-accent transition-colors duration-300">Tournaments</a>
+          <a href="./rplayels.html" class="hover:text-chess-accent transition-colors duration-300">Rated Players</a>
+          <a href="./blog.html" class="hover:text-chess-accent transition-colors duration-300">Blogs</a>
+          <a href="#contact" class="hover:text-chess-accent transition-colors duration-300">Contact</a>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform?usp=header"
+            target="_blank"
+            class="bg-chess-accent text-gray-900 font-semibold px-4 py-2 rounded-md hover:bg-chess-accent-dark transition-colors duration-300"
+          >
+            Register Now
+          </a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="menu-button" class="md:hidden text-chess-accent focus:outline-none" aria-label="Toggle Menu">
+          <i class="fas fa-bars text-2xl"></i>
+        </button>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden fixed top-0 right-0 h-screen w-64 bg-chess-dark/95 backdrop-blur-2xl border border-white/30 z-30 p-6 transition-transform duration-300 ease-in-out transform translate-x-full">
+          <div class="flex flex-col space-y-6 mt-16">
+            <a href="#" class="text-lg hover:text-chess-accent transition-colors duration-300">Home</a>
+            <a href="#coach" class="text-lg hover:text-chess-accent transition-colors duration-300">Coaches</a>
+            <a href="./tournaments.html" class="text-lg hover:text-chess-accent transition-colors duration-300">Tournaments</a>
+            <a href="./rplayels.html" class="text-lg hover:text-chess-accent transition-colors duration-300">Rated Players</a>
+            <a href="./blog.html" class="text-lg hover:text-chess-accent transition-colors duration-300">Blogs</a>
+            <a href="#contact" class="text-lg hover:text-chess-accent transition-colors duration-300">Contact</a>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform?usp=header"
+              target="_blank"
+              class="bg-chess-accent text-gray-900 font-semibold px-4 py-2 rounded-md hover:bg-chess-accent-dark transition-colors duration-300"
+            >
+              Register Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section (New Layout) -->
+    <section class="relative z-10 pt-32 md:pt-40 lg:pt-48 pb-12 md:pb-16 px-4">
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-6 backdrop-blur-xl">
+            <span class="text-chess-accent font-semibold">MKCA</span>
+            <span class="text-chess-gray">•</span>
+            <span class="text-chess-light/80 text-sm">Magical Knight Chess Academy</span>
+          </div>
+
+          <h1 class="font-serif font-bold text-4xl md:text-6xl lg:text-7xl leading-tight tracking-tight drop-shadow-2xl">
+            <span class="bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">Sharpen</span>
+            your mind.
+            <br />
+            Master the game.
+          </h1>
+
+          <p class="mt-5 text-base md:text-lg text-chess-light/80 max-w-2xl leading-relaxed">
+            Build strategy, confidence, and competitive excellence — with training and tournaments guided by MKCA.
+          </p>
+
+          <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform?usp=header"
+              target="_blank"
+              class="bg-chess-accent text-gray-900 font-semibold px-6 py-3 rounded-xl hover:bg-chess-accent-light transition-colors duration-300 inline-flex items-center justify-center gap-2"
+            >
+              <i class="fas fa-chess-knight"></i>
+              Register Now
+            </a>
+            <a
+              href="./tournaments.html"
+              class="bg-white/10 border border-white/20 text-chess-light font-semibold px-6 py-3 rounded-xl hover:bg-white/15 transition-colors duration-300 inline-flex items-center justify-center gap-2 backdrop-blur-xl"
+            >
+              <i class="fas fa-trophy"></i>
+              View Tournaments
+            </a>
+            <a
+              href="./blog.html"
+              class="bg-white/10 border border-white/20 text-chess-light font-semibold px-6 py-3 rounded-xl hover:bg-white/15 transition-colors duration-300 inline-flex items-center justify-center gap-2 backdrop-blur-xl"
+            >
+              <i class="fas fa-newspaper"></i>
+              Read Blog
+            </a>
+          </div>
+
+          <div class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-white/10 border border-white/20 rounded-2xl p-4 backdrop-blur-xl">
+              <div class="text-chess-accent font-semibold">Coaching</div>
+              <div class="text-sm text-chess-light/80">All levels, structured learning</div>
+            </div>
+            <div class="bg-white/10 border border-white/20 rounded-2xl p-4 backdrop-blur-xl">
+              <div class="text-chess-accent font-semibold">Tournaments</div>
+              <div class="text-sm text-chess-light/80">Play, improve, compete</div>
+            </div>
+            <div class="bg-white/10 border border-white/20 rounded-2xl p-4 backdrop-blur-xl">
+              <div class="text-chess-accent font-semibold">Community</div>
+              <div class="text-sm text-chess-light/80">Northern chess growth</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl p-6 md:p-8">
+            <div class="flex items-center justify-between gap-3 mb-4">
+              <div class="inline-flex items-center gap-2">
+                <i class="fas fa-map-marker-alt text-chess-accent"></i>
+                <span class="font-semibold text-chess-light">Kilinochchi</span>
+              </div>
+              <span class="text-xs bg-white/10 border border-white/20 text-chess-light px-3 py-1 rounded-full font-semibold">Open Hours</span>
+            </div>
+
+            <h2 id="academy-message" class="font-serif text-2xl md:text-3xl mb-3 text-chess-accent">
+              Loading...
+            </h2>
+
+            <p class="text-chess-light/80 mb-6">
+              Near Fashion Bee, Thirunagar, Kilinochchi
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+              <a
+                href="https://maps.app.goo.gl/x7ZbwF4F1dKrmtM37"
+                target="_blank"
+                class="bg-white/10 border border-white/20 text-chess-light font-semibold px-5 py-3 rounded-xl hover:bg-white/15 transition-colors duration-300 inline-flex items-center justify-center gap-2"
+              >
+                <i class="fas fa-map"></i>
+                Google Maps
+              </a>
+              <a
+                href="#coach"
+                class="bg-white/10 border border-white/20 text-chess-light font-semibold px-5 py-3 rounded-xl hover:bg-white/15 transition-colors duration-300 inline-flex items-center justify-center gap-2"
+              >
+                <i class="fas fa-users"></i>
+                Our Coaches
+              </a>
+            </div>
+
+            <div class="bg-white/5 rounded-2xl p-5 border border-white/10">
+              <div class="flex items-center justify-between gap-3 mb-2">
+                <div class="inline-flex items-center gap-2">
+                  <span class="text-xl">🏆</span>
+                  <span class="font-semibold text-chess-light">Next Highlight</span>
+                </div>
+                <span class="text-xs bg-white/10 border border-white/20 text-chess-light px-3 py-1 rounded-full font-semibold">2026</span>
+              </div>
+              <div class="font-serif text-xl font-bold text-chess-accent">Magical Knight Classic</div>
+              <div class="text-sm text-chess-light/80 mt-1">01 April 2026 • Registration open</div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                <a
+                  href="./pdf/ᴍᴀɢɪᴄᴀʟ ᴋɴɪɢʜᴛ ᴄʟᴀꜱꜱɪᴄ ᴄʜᴇꜱꜱ ᴛᴏᴜʀɴᴀᴍᴇɴᴛ 2026.pdf"
+                  target="_blank"
+                  class="bg-chess-accent text-gray-900 font-semibold px-5 py-3 rounded-xl hover:bg-chess-accent-light transition-colors duration-300 inline-flex items-center justify-center gap-2"
+                >
+                  <i class="fas fa-file-pdf"></i>
+                  PDF
+                </a>
+                <a
+                  href="./tournaments.html#current-tournament"
+                  class="bg-white/10 border border-white/20 text-chess-light font-semibold px-5 py-3 rounded-xl hover:bg-white/15 transition-colors duration-300 inline-flex items-center justify-center gap-2"
+                >
+                  <i class="fas fa-arrow-right"></i>
+                  Details
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 flex justify-center">
+        <a href="#about" class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/10 border border-white/20 text-chess-accent hover:text-chess-accent-light hover:bg-white/15 transition-colors duration-300" aria-label="Scroll to About">
+          <i class="fas fa-chevron-down"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="relative z-10 py-20 px-4">
+      <div class="max-w-6xl mx-auto">
+        <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 md:p-12 transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+          <h2 class="font-serif text-4xl md:text-5xl font-bold text-center mb-8 bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
+            About Our Academy
+          </h2>
+          <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <p class="text-lg md:text-xl leading-relaxed mb-6 text-chess-light/90">
+                Welcome to the
+                <strong class="text-chess-accent">Magical Knight Chess Academy</strong>, where the timeless game of chess becomes a journey of intellectual growth and strategic excellence.
+              </p>
+              <p class="text-lg md:text-xl leading-relaxed mb-6 text-chess-light/90">
+                Located in
+                <strong class="text-chess-accent">Kilinochchi</strong>,
+                <strong class="text-chess-accent">Puthukudiyiruppu</strong>, and
+                <strong class="text-chess-accent">Vavuniya</strong>, our academy blends classical chess wisdom with modern teaching techniques. We provide an inspiring and supportive environment where players of all levels can thrive and unlock their full potential.
+              </p>
+              <div class="flex items-center space-x-4 text-chess-accent">
+                <i class="fas fa-trophy text-2xl"></i>
+                <span class="text-lg font-semibold">Excellence in Chess Education</span>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="text-8xl md:text-9xl mb-4">♟</div>
+              <p class="text-chess-gray italic">"Chess is the gymnasium of the mind"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Coaches Section -->
+    <section id="coach" class="relative z-10 py-20 px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="font-serif text-3xl md:text-4xl font-bold mb-12 bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
+          Meet Our Coaches
+        </h2>
+        <div class="flex flex-col md:flex-row justify-center gap-12">
+          <!-- Coach 1 -->
+          <div class="bg-white/15 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 flex flex-col items-center max-w-xs mx-auto">
+            <img src="./asserts/disha.jpg" alt="Coach Disha" class="rounded-full w-44 h-44 object-cover mb-6 shadow-lg" />
+            <h3 class="text-2xl font-semibold mb-2 text-chess-light">DISHANTHAN. V</h3>
+            <p class="text-chess-accent font-medium mb-1">ARENA INTERNATIONAL MASTER</p>
+            <p class="text-chess-light text-lg mb-3">Rating: 1637</p>
+            <div class="text-chess-light text-sm space-y-1">
+              <p>
+                <strong>Email:</strong>
+                <a href="mailto:dishanthangm@gmail.com" class="text-chess-accent hover:underline">dishanthangm@gmail.com</a>
+              </p>
+              <p>
+                <strong>Phone:</strong>
+                <a href="tel:+94 77 527 3514" class="text-chess-accent hover:underline">+94 77 527 3514</a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Coach 2 -->
+          <div class="bg-white/15 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 flex flex-col items-center max-w-xs mx-auto">
+            <img src="./asserts/tharsi.png" alt="Coach Tharsi" class="rounded-full w-44 h-44 object-cover mb-6 shadow-lg" />
+            <h3 class="text-2xl font-semibold mb-2 text-chess-light">THARSIKAN. V</h3>
+            <p class="text-chess-accent font-medium mb-1">ARENA FEDERATION MASTER</p>
+            <p class="text-chess-light text-lg mb-3">Rating: 1527</p>
+            <div class="text-chess-light text-sm space-y-1">
+              <p>
+                <strong>Email:</strong>
+                <a href="mailto:tharsiktharsikan@gmail.com" class="text-chess-accent hover:underline">tharsiktharsikan@gmail.com</a>
+              </p>
+              <p>
+                <strong>Phone:</strong>
+                <a href="tel:+94 75 317 5528" class="text-chess-accent hover:underline">+94 75 317 5528</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="relative z-10 py-20 px-4">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
+          What Awaits You
+        </h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-5xl mb-4 text-chess-accent"><i class="fas fa-graduation-cap"></i></div>
+            <h3 class="font-serif text-2xl font-bold mb-4 text-chess-light">Expert Instruction</h3>
+            <p class="text-chess-light/80 leading-relaxed">Learn from grandmasters and certified instructors with decades of competitive experience.</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-5xl mb-4 text-chess-accent"><i class="fas fa-users"></i></div>
+            <h3 class="font-serif text-2xl font-bold mb-4 text-chess-light">Community</h3>
+            <p class="text-chess-light/80 leading-relaxed">Join a vibrant community of chess enthusiasts and forge lifelong friendships.</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-5xl mb-4 text-chess-accent"><i class="fas fa-laptop"></i></div>
+            <h3 class="font-serif text-2xl font-bold mb-4 text-chess-light">Modern Tools</h3>
+            <p class="text-chess-light/80 leading-relaxed">Access cutting-edge chess software and analysis tools to accelerate your learning.</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-5xl mb-4 text-chess-accent"><i class="fas fa-medal"></i></div>
+            <h3 class="font-serif text-2xl font-bold mb-4 text-chess-light">Tournaments</h3>
+            <p class="text-chess-light/80 leading-relaxed">Participate in regular tournaments and competitions to test your skills.</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-5xl mb-4 text-chess-accent"><i class="fas fa-clock"></i></div>
+            <h3 class="font-serif text-2xl font-bold mb-4 text-chess-light">Flexible Schedule</h3>
+            <p class="text-chess-light/80 leading-relaxed">Choose from various class times and formats that fit your busy lifestyle.</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-5xl mb-4 text-chess-accent"><i class="fas fa-chart-line"></i></div>
+            <h3 class="font-serif text-2xl font-bold mb-4 text-chess-light">Progress Tracking</h3>
+            <p class="text-chess-light/80 leading-relaxed">Monitor your improvement with detailed analytics and personalized feedback.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="relative z-10 py-20 px-4" id="events">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="font-serif text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
+          Event Highlights
+        </h2>
+        <div class="flex overflow-x-auto snap-x snap-mandatory scrollbar-none py-4 px-2">
+          <!-- Opening Ceremony Card -->
+          <div class="min-w-[200px] rounded-2xl shadow-lg bg-white/15 backdrop-blur-2xl border border-white/30  p-4 mx-2 snap-center">
+            <div class="flex space-x-2 overflow-x-auto scrollbar-none rounded-xl mb-3">
+              <img
+                src="./asserts/openingceremony/IMG-20250608-WA0158.jpg"
+                alt="Open 1"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+              <img
+                src="./asserts/openingceremony/IMG-20250608-WA0161.jpg"
+                alt="Open 2"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+              <img
+                src="./asserts/openingceremony/IMG-20250608-WA0169.jpg"
+                alt="Open 3"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+            </div>
+            <h3 class="text-center font-semibold text-chess-accent max-w-sm mx-auto">
+              <div class="text-xl md:text-xl font-bold mb-1">Opening Ceremony</div>
+              <div class="flex items-center justify-center text-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 mr-2 text-chess-accent"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                June 2025
+              </div>
+            </h3>
+          </div>
+
+          <!-- Rapid Chess Tournament Card -->
+          <div class="min-w-[200px] rounded-2xl shadow-lg bg-white/15 backdrop-blur-2xl border border-white/30  p-4 mx-2 snap-center">
+            <div class="flex space-x-2 overflow-x-auto scrollbar-none rounded-xl mb-3">
+              <img
+                src="./asserts/tournaments-rapid 2025/IMG-20250608-WA0039.jpg"
+                alt="Match 1"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+              <img
+                src="./asserts/tournaments-rapid 2025/IMG-20250608-WA0050.jpg"
+                alt="Match 2"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+              <img
+                src="./asserts/tournaments-rapid 2025/IMG-20250608-WA0109.jpg"
+                alt="Match 3"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+            </div>
+            <h3 class="text-center font-semibold text-chess-accent max-w-sm mx-auto">
+              <div class="text-xl md:text-xl font-bold mb-1">Rapid Chess Tournament</div>
+              <div class="flex items-center justify-center text-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 mr-2 text-chess-accent"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                June 2025
+              </div>
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Modal -->
+      <div id="imageModal" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden z-[1000]" onclick="closeModal()">
+        <div class="relative max-w-4xl max-h-[90vh]">
+          <img id="modalImage" src="" alt="Enlarged Image" class="max-w-full max-h-[90vh] rounded-lg shadow-lg" onclick="event.stopPropagation()" />
+          <button class="absolute top-6 right-6 text-white text-4xl font-bold" onclick="closeModal()" aria-label="Close Modal">×</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievement Section -->
+    <section class="relative z-10 py-20 px-4" id="achievements">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="font-serif text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
+          Achievements
+        </h2>
+        <div class="flex justify-center">
+          <div class="w-full max-w-md rounded-2xl shadow-lg bg-white/15 backdrop-blur-2xl border border-white/30 p-4">
+            <div class="flex space-x-2 overflow-x-auto scrollbar-none rounded-xl mb-3">
+              <img
+                src="./asserts/Girls championship 2025/WhatsApp Image 2025-07-01 at 19.56.39_2addfa64.jpg"
+                alt="Match 1"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+              <img
+                src="./asserts/Girls championship 2025/WhatsApp Image 2025-07-01 at 19.56.39_c090eef2.jpg"
+                alt="Match 2"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+              <img
+                src="./asserts/Girls championship 2025/WhatsApp Image 2025-07-01 at 19.56.39_898613f5.jpg"
+                alt="Match 3"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+              <img
+                src="./asserts/Girls championship 2025/WhatsApp Image 2025-07-01 at 19.56.40_370362e0.jpg"
+                alt="Match 4"
+                class="w-32 h-24 object-cover rounded-lg flex-shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+                onclick="openModal(this.src)"
+              />
+            </div>
+            <h3 class="text-center font-semibold text-chess-accent">
+              <div class="text-xl md:text-xl font-bold mb-1">
+                Northern Provincial Team Chess Tournament - 2025<br />
+                Champion: Kilinochchi Girls Team
+              </div>
+              <div class="flex items-center justify-center text-lg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5 mr-2 text-chess-accent"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                June 2025
+              </div>
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Modal -->
+      <div id="imageModal" class="fixed inset-0 bg-black/80 flex items-center justify-center hidden z-[1000]" onclick="closeModal()">
+        <div class="relative max-w-4xl max-h-[90vh]">
+          <img id="modalImage" src="" alt="Enlarged Image" class="max-w-full max-h-[90vh] rounded-lg shadow-lg" onclick="event.stopPropagation()" />
+          <button class="absolute top-6 right-6 text-white text-4xl font-bold" onclick="closeModal()" aria-label="Close Modal">×</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chess Facts Section -->
+    <section class="relative z-10 py-20 px-4">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
+          Did You Know?
+        </h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-4xl font-bold text-chess-accent mb-4">600M+</div>
+            <p class="text-chess-light/80">Chess players worldwide</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-4xl font-bold text-chess-accent mb-4">1500</div>
+            <p class="text-chess-light/80">Years of chess history</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-4xl font-bold text-chess-accent mb-4">10^120</div>
+            <p class="text-chess-light/80">Possible chess games</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="relative z-10 py-20 px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="bg-white/15 backdrop-blur-2xl border border-white/30 rounded-3xl p-12 transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+          <blockquote class="text-2xl md:text-3xl font-serif italic text-chess-light/90 mb-6">
+            "Chess is mental torture."
+          </blockquote>
+          <cite class="text-chess-accent font-semibold">— Garry Kasparov</cite>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="relative z-10 w-full py-12 px-4 mt-20">
+      <div class="max-w-6xl mx-auto">
+        <div class="bg-white/15 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 md:p-12">
+          <div class="grid md:grid-cols-3 gap-8 mb-8">
+            <div class="text-center md:text-left">
+              <h3 class="font-serif text-2xl font-bold text-chess-accent mb-4 flex items-center justify-center md:justify-start">
+                <i class="fas fa-chess-knight mr-2"></i>
+                Magical Knight Chess Academy
+              </h3>
+              <p class="text-chess-light/80">Elevating minds through the royal game of chess.</p>
+            </div>
+            <div class="hidden md:block"></div>
+            <div class="text-center md:text-right">
+              <h4 class="font-semibold text-chess-light mb-4">Contact Info</h4>
+              <div class="text-chess-light/80 space-y-2">
+                <div class="flex items-center justify-center md:justify-end">
+                  <i class="fas fa-phone mr-2 text-chess-accent"></i>
+                  <span>+94 75 317 5528 – Tharsikan.V</span>
+                </div>
+                <div class="flex items-center justify-center md:justify-end">
+                  <i class="fas fa-phone mr-2 text-chess-accent"></i>
+                  <span>+94 77 527 3514 – Dishanthan.V</span>
+                </div>
+              </div>
+              <h4 class="font-semibold text-chess-light mb-4 mt-6">Follow Us</h4>
+              <div class="text-chess-light/80">
+                <a
+                  href="https://web.facebook.com/magicalknightchessacademykilinochchi"
+                  class="flex items-center justify-center md:justify-end hover:text-chess-accent transition-all duration-300"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i class="fab fa-facebook-f mr-2 text-chess-accent"></i>
+                  <span>Magical Knight Chess Academy</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-chess-accent/20 pt-8 text-center">
+            <p class="text-chess-light/70 mb-4">© 2025 Senzura codeLabs. All rights reserved.</p>
+            <p class="text-chess-light/60">
+              Crafted with
+              <span class="text-red-500 animate-pulse">❤</span> by
+              <a
+                href="www.senzura.tech"
+                class="text-chess-accent hover:text-chess-accent-light transition-all duration-300 underline underline-offset-2 hover:underline-offset-4 ml-1"
+              >
+                <i class="fab fa-github mr-1"></i>Senzura codeLabs
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 z-30 bg-white/15 backdrop-blur-2xl border border-white/30 rounded-full p-4 text-chess-accent hover:text-chess-accent-light transition-all duration-300 opacity-0 pointer-events-none hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+      <i class="fas fa-chevron-up text-xl"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script>
+      const launchDate = new Date("June 21, 2025 00:00:00").getTime();
+
+      const countdown = setInterval(function () {
+        const now = new Date().getTime();
+        const distance = launchDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days")?.innerHTML = days.toString().padStart(2, "0");
+        document.getElementById("hours")?.innerHTML = hours.toString().padStart(2, "0");
+        document.getElementById("minutes")?.innerHTML = minutes.toString().padStart(2, "0");
+        document.getElementById("seconds")?.innerHTML = seconds.toString().padStart(2, "0");
+
+        if (distance < 0) {
+          clearInterval(countdown);
+          document.getElementById("countdown")?.classList.add("hidden");
+          document.getElementById("launched")?.classList.remove("hidden");
+        }
+      }, 1000);
+
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+            const mobileMenu = document.getElementById("mobile-menu");
+            const menuButton = document.getElementById("menu-button");
+            if (!mobileMenu.classList.contains("translate-x-full")) {
+              mobileMenu.classList.add("translate-x-full");
+              menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+              setTimeout(() => {
+                mobileMenu.classList.add("hidden");
+              }, 300);
+            }
+          }
+        });
+      });
+
+      const backToTopButton = document.getElementById("backToTop");
+      window.addEventListener("scroll", () => {
+        if (window.pageYOffset > 300) {
+          backToTopButton.style.opacity = "1";
+          backToTopButton.style.pointerEvents = "auto";
+        } else {
+          backToTopButton.style.opacity = "0";
+          backToTopButton.style.pointerEvents = "none";
+        }
+      });
+
+      backToTopButton.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      });
+
+      window.addEventListener("scroll", () => {
+        const scrolled = window.pageYOffset;
+        const chessPieces = document.querySelectorAll(".chess-piece");
+
+        chessPieces.forEach((piece, index) => {
+          const speed = 0.5 + index * 0.1;
+          piece.style.transform = `translateY(${scrolled * speed}px)`;
+        });
+      });
+
+      document.querySelector("form")?.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = this.querySelector('input[type="email"]').value;
+        const button = this.querySelector("button");
+        const originalText = button.textContent;
+        button.textContent = "Subscribed!";
+        button.classList.add("bg-gradient-to-r", "from-green-600", "to-teal-500");
+
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.classList.remove("bg-gradient-to-r", "from-green-600", "to-teal-500");
+          this.reset();
+        }, 2000);
+      });
+
+      window.addEventListener("load", () => {
+        document.body.classList.add("loaded");
+      });
+    </script>
+  </body>
+</html>

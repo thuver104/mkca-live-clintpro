@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MKCA - Rated Players</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800&family=Noto+Serif:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              serif: ['"Noto Serif"', "serif"],
+              sans: ['"Noto Sans"', "sans-serif"],
+            },
+            colors: {
+              "chess-dark": "#0a0a0a",
+              "chess-darker": "#050505",
+              "chess-accent": "#d4af37",
+              "chess-accent-light": "#f4d03f",
+              "chess-light": "#f8f9fa",
+              "chess-gray": "#6c757d",
+              "chess-blue": "#4a90e2",
+            },
+            backgroundImage: {
+              hero: "url('https://images.unsplash.com/photo-1529699211952-734e80c4d42b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')",
+              "chess-pattern":
+                'url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Crect width="30" height="30"/%3E%3Crect x="30" y="30" width="30" height="30"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')',
+            },
+            animation: {
+              float: "float 6s ease-in-out infinite",
+              glow: "glow 2s ease-in-out infinite alternate",
+              "slide-up": "slideUp 0.8s ease-out",
+              "fade-in": "fadeIn 1s ease-out",
+              "bounce-slow": "bounce 3s infinite",
+            },
+            keyframes: {
+              float: {
+                "0%, 100%": { transform: "translateY(0px)" },
+                "50%": { transform: "translateY(-20px)" },
+              },
+              glow: {
+                "0%": { boxShadow: "0 0 15px rgba(212, 175, 55, 0.5)" },
+                "100%": { boxShadow: "0 0 25px rgba(212, 175, 55, 0.8)" },
+              },
+              slideUp: {
+                "0%": { transform: "translateY(50px)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+              fadeIn: {
+                "0%": { opacity: "0" },
+                "100%": { opacity: "1" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const menuButton = document.getElementById("menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        // Toggle mobile menu
+        menuButton.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const isCurrentlyOpen = !mobileMenu.classList.contains("translate-x-full");
+          
+          if (isCurrentlyOpen) {
+            // Close menu
+            mobileMenu.classList.add("translate-x-full");
+            menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            setTimeout(() => {
+              mobileMenu.classList.add("hidden");
+            }, 300);
+          } else {
+            // Open menu
+            mobileMenu.classList.remove("hidden");
+            setTimeout(() => {
+              mobileMenu.classList.remove("translate-x-full");
+            }, 10);
+            menuButton.innerHTML = '<i class="fas fa-times text-2xl"></i>';
+          }
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener("click", (e) => {
+          if (
+            !mobileMenu.contains(e.target) &&
+            !menuButton.contains(e.target) &&
+            !mobileMenu.classList.contains("translate-x-full")
+          ) {
+            mobileMenu.classList.add("translate-x-full");
+            menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            setTimeout(() => {
+              mobileMenu.classList.add("hidden");
+            }, 300);
+          }
+        });
+
+        // Close menu when clicking a link inside the menu
+        mobileMenu.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            mobileMenu.classList.add("translate-x-full");
+            menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+            setTimeout(() => {
+              mobileMenu.classList.add("hidden");
+            }, 300);
+          });
+        });
+      });
+
+      function openModal(src) {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        modalImg.src = src;
+        modal.classList.remove("hidden");
+        document.body.classList.add("modal-open");
+        modal.style.zIndex = "1000";
+        modalImg.style.zIndex = "1001";
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("imageModal");
+        modal.classList.add("hidden");
+        document.body.classList.remove("modal-open");
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.key === "Escape" &&
+          !document.getElementById("imageModal").classList.contains("hidden")
+        ) {
+          closeModal();
+        }
+      });
+    </script>
+  </head>
+  <body class="bg-chess-dark text-chess-light font-sans overflow-x-hidden">
+    <!-- Floating Chess Pieces Background -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 10%; left: 10%">♛</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 20%; right: 15%; animation-delay: -2s">♜</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 60%; left: 5%; animation-delay: -4s">♝</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 70%; right: 10%">♞</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 40%; left: 80%">♟</div>
+      <div class="text-6xl opacity-10 absolute animate-float" style="top: 80%; left: 70%">♚</div>
+    </div>
+
+    <!-- Hero Background with Enhanced Overlay -->
+    <div class="fixed inset-0 bg-hero bg-cover bg-center bg-no-repeat">
+      <div class="absolute inset-0 bg-gradient-to-br from-chess-darker via-chess-dark to-chess-darker opacity-85"></div>
+      <div class="absolute inset-0 bg-chess-pattern"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative z-20 w-full py-6 px-4">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="font-serif font-bold text-xl text-chess-accent flex items-center space-x-2">
+          <img src="./logo-photoaidcom-cropped.jpg" alt="MKCA Logo" class="w-8 h-8 object-contain" />
+          <span>MKCA</span>
+        </div>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex space-x-6 items-center">
+          <a href="./index.html" class="hover:text-chess-accent transition-colors duration-300">Home</a>
+          <a href="./index.html#coach" class="hover:text-chess-accent transition-colors duration-300">Coaches</a>
+          <a href="./tournaments.html" class="hover:text-chess-accent transition-colors duration-300">Tournaments</a>
+          <a href="./rplayels.html" class="text-chess-accent transition-colors duration-300">Rated Players</a>
+          <a href="./blog.html" class="hover:text-chess-accent transition-colors duration-300">Blogs</a>
+          <a href="./index.html#contact" class="hover:text-chess-accent transition-colors duration-300">Contact</a>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform?usp=header"
+            target="_blank"
+            class="bg-chess-accent text-gray-900 font-semibold px-4 py-2 rounded-md hover:bg-chess-accent-dark transition-colors duration-300"
+          >
+            Register Now
+          </a>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="menu-button" class="md:hidden text-chess-accent focus:outline-none" aria-label="Toggle Menu">
+          <i class="fas fa-bars text-2xl"></i>
+        </button>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden fixed top-0 right-0 h-screen w-64 bg-chess-dark/95 backdrop-blur-2xl border border-white/30 z-30 p-6 transition-transform duration-300 ease-in-out transform translate-x-full">
+          <div class="flex flex-col space-y-6 mt-16">
+            <a href="./index.html" class="text-lg hover:text-chess-accent transition-colors duration-300">Home</a>
+            <a href="./index.html#coach" class="text-lg hover:text-chess-accent transition-colors duration-300">Coaches</a>
+            <a href="./tournaments.html" class="text-lg hover:text-chess-accent transition-colors duration-300">Tournaments</a>
+            <a href="./rplayels.html" class="text-lg text-chess-accent transition-colors duration-300">Rated Players</a>
+            <a href="./blog.html" class="text-lg hover:text-chess-accent transition-colors duration-300">Blogs</a>
+            <a href="./index.html#contact" class="text-lg hover:text-chess-accent transition-colors duration-300">Contact</a>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform?usp=header"
+              target="_blank"
+              class="bg-chess-accent text-gray-900 font-semibold px-4 py-2 rounded-md hover:bg-chess-accent-dark transition-colors duration-300"
+            >
+              Register Now
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12 text-center">
+      <div class="animate-slide-up">
+        <h1 class="font-serif font-bold text-5xl md:text-7xl lg:text-8xl mb-6 tracking-wider drop-shadow-2xl">
+          <span class="bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">Rated</span><br />
+          <span class="text-chess-light">Players</span>
+        </h1>
+
+        <p class="font-sans text-xl md:text-3xl lg:text-4xl tracking-wide mb-4 max-w-4xl text-chess-light/90 font-light">
+          Our Elite Chess Champions
+        </p>
+
+        <p class="font-sans text-lg md:text-xl mb-12 max-w-3xl text-chess-gray font-light leading-relaxed">
+          Meet our accomplished players who have earned official ratings through competitive play.
+        </p>
+      </div>
+
+      <!-- Players Info -->
+      <div class="w-full max-w-5xl mb-16 animate-fade-in">
+        <h2 class="font-serif text-2xl md:text-3xl mb-4 text-chess-accent text-center">
+          MKCA Elite Players
+        </h2>
+
+        <p class="mb-8 text-lg text-chess-accent/90 flex flex-col items-center gap-2">
+          <span class="flex items-center gap-2">
+            <span class="text-center text-base md:text-lg font-semibold">Officially Rated Chess Players from Northern Province</span>
+          </span>
+        </p>
+      </div>
+
+      <!-- Scroll Indicator -->
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce-slow">
+        <i class="fas fa-chevron-down text-chess-accent text-2xl"></i>
+      </div>
+    </section>
+
+    <!-- Rated Players Section -->
+    <section id="rated-players" class="relative z-10 py-20 px-4">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-center mb-12 bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
+          Our Rated Players
+        </h2>
+        
+        <!-- Rating Categories -->
+        <div class="grid md:grid-cols-3 gap-8 mb-12">
+          <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-6xl mb-4">🏆</div>
+            <h3 class="font-serif text-2xl font-bold text-chess-accent mb-4">Arena International Masters</h3>
+            <p class="text-chess-light/80 mb-4">Arena Title</p>
+            <div class="text-3xl font-bold text-chess-accent">1</div>
+            <p class="text-chess-light/60">Elite Player</p>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-6xl mb-4">⭐</div>
+            <h3 class="font-serif text-2xl font-bold text-chess-accent mb-4">Arena FIDE Masters</h3>
+            <p class="text-chess-light/80 mb-4">Arena Title</p>
+            <div class="text-3xl font-bold text-chess-accent">2</div>
+            <p class="text-chess-light/60">Advanced Players</p>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-6xl mb-4">🎯</div>
+            <h3 class="font-serif text-2xl font-bold text-chess-accent mb-4">Arena Federation Masters</h3>
+            <p class="text-chess-light/80 mb-4">Arena Title</p>
+            <div class="text-3xl font-bold text-chess-accent">1</div>
+            <p class="text-chess-light/60">Federation Player</p>
+          </div>
+        </div>
+
+        <!-- Featured Players -->
+        <div class="mb-16">
+          <h3 class="font-serif text-3xl font-bold text-center mb-8 text-chess-accent">Featured Players</h3>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Dishanthan V. -->
+            <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-2xl p-6 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+              <div class="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden border-2 border-chess-accent/30">
+                <img src="./asserts/disha.jpg" alt="Dishanthan V." class="w-full h-full object-cover">
+              </div>
+              <h4 class="font-serif text-xl font-bold text-chess-light mb-2">Dishanthan V.</h4>
+              <p class="text-chess-accent font-semibold mb-1">Arena Int'l Master</p>
+              <p class="text-chess-light/80 text-sm mb-2">Born: 2003 | Age: 22</p>
+              <div class="bg-white/5 rounded-lg p-2 text-xs space-y-1">
+                <p class="text-chess-light/80">Standard: <span class="text-chess-accent font-semibold">1637</span></p>
+                <p class="text-chess-light/80">Rapid: <span class="text-chess-accent font-semibold">1504</span></p>
+                <p class="text-chess-light/80">Blitz: <span class="text-chess-accent font-semibold">1553</span></p>
+                <p class="text-chess-light/80">FIDE ID: 9972951</p>
+              </div>
+              <a href="https://chessarena.com/profile/887214" target="_blank" class="inline-block mt-2 text-chess-accent hover:text-chess-accent-light text-xs">Arena Profile</a>
+            </div>
+
+            <!-- Tharsikan V. -->
+            <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-2xl p-6 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+              <div class="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden border-2 border-chess-accent/30">
+                <img src="./asserts/tharsi-arena.jpg" alt="Tharsikan V." class="w-full h-full object-cover">
+              </div>
+              <h4 class="font-serif text-xl font-bold text-chess-light mb-2">Tharsikan V.</h4>
+              <p class="text-chess-accent font-semibold mb-1">Arena Fed Master</p>
+              <p class="text-chess-light/80 text-sm mb-2">MKCA Head Coach</p>
+              <div class="bg-white/5 rounded-lg p-2 text-xs space-y-1">
+                <p class="text-chess-light/80">Standard: <span class="text-chess-accent font-semibold">1527</span></p>
+                <p class="text-chess-light/80">Rapid: <span class="text-chess-light/60">N/A</span></p>
+                <p class="text-chess-light/80">Blitz: <span class="text-chess-accent font-semibold">1403</span></p>
+                <p class="text-chess-light/80">FIDE ID: 29994934</p>
+              </div>
+              <a href="https://chessarena.com/profile/890486" target="_blank" class="inline-block mt-2 text-chess-accent hover:text-chess-accent-light text-xs">Arena Profile</a>
+            </div>
+
+            <!-- Karthiheyan S. -->
+            <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-2xl p-6 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+              <div class="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden border-2 border-chess-accent/30">
+                <img src="./asserts/karthikeyans.jpg" alt="Karthiheyan S." class="w-full h-full object-cover">
+              </div>
+              <h4 class="font-serif text-xl font-bold text-chess-light mb-2">Karthiheyan S.</h4>
+              <p class="text-chess-accent font-semibold mb-1">Arena FIDE Master</p>
+              <p class="text-chess-light/80 text-sm mb-2">Rapid Specialist</p>
+              <div class="bg-white/5 rounded-lg p-2 text-xs space-y-1">
+                <p class="text-chess-light/80">Standard: <span class="text-chess-light/60">N/A</span></p>
+                <p class="text-chess-light/80">Rapid: <span class="text-chess-accent font-semibold">1648</span></p>
+                <p class="text-chess-light/80">Blitz: <span class="text-chess-accent font-semibold">1491</span></p>
+                <p class="text-chess-light/80">FIDE ID: 80851312</p>
+              </div>
+              <a href="https://chessarena.com/profile/923552" target="_blank" class="inline-block mt-2 text-chess-accent hover:text-chess-accent-light text-xs">Arena Profile</a>
+            </div>
+
+            <!-- Rajina K. -->
+            <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-2xl p-6 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+              <div class="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden border-2 border-chess-accent/30">
+                <img src="./asserts/r-ratedplay.jpg" alt="Rajina K." class="w-full h-full object-cover">
+              </div>
+              <h4 class="font-serif text-xl font-bold text-chess-light mb-2">Rajina K.</h4>
+              <p class="text-chess-accent font-semibold mb-1">Arena FIDE Master</p>
+              <p class="text-chess-light/80 text-sm mb-2">Women's Chess Champion</p>
+              <div class="bg-white/5 rounded-lg p-2 text-xs space-y-1">
+                <p class="text-chess-light/80">Standard: <span class="text-chess-accent font-semibold">1502</span></p>
+                <p class="text-chess-light/80">Rapid: <span class="text-chess-light/60">N/A</span></p>
+                <p class="text-chess-light/80">Blitz: <span class="text-chess-light/60">N/A</span></p>
+                <p class="text-chess-light/80">FIDE ID: 9987215</p>
+              </div>
+              <a href="https://chessarena.com/profile/941145" target="_blank" class="inline-block mt-2 text-chess-accent hover:text-chess-accent-light text-xs">Arena Profile</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rating System Information -->
+        <div class="bg-white/10 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 md:p-12">
+          <h3 class="font-serif text-2xl font-bold text-center mb-8 text-chess-accent">Chess Rating System</h3>
+          <div class="grid md:grid-cols-2 gap-8 mb-8">
+            <div>
+              <h4 class="font-semibold text-chess-light mb-4">FIDE Rating Categories</h4>
+              <div class="space-y-3">
+                <div class="flex justify-between bg-white/5 rounded-lg p-3">
+                  <span class="text-chess-light">Grandmaster</span>
+                  <span class="text-chess-accent font-semibold">2500+</span>
+                </div>
+                <div class="flex justify-between bg-white/5 rounded-lg p-3">
+                  <span class="text-chess-light">International Master</span>
+                  <span class="text-chess-accent font-semibold">2400+</span>
+                </div>
+                <div class="flex justify-between bg-white/5 rounded-lg p-3">
+                  <span class="text-chess-light">FIDE Master</span>
+                  <span class="text-chess-accent font-semibold">2300+</span>
+                </div>
+                <div class="flex justify-between bg-white/5 rounded-lg p-3">
+                  <span class="text-chess-light">Candidate Master</span>
+                  <span class="text-chess-accent font-semibold">2200+</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 class="font-semibold text-chess-light mb-4">Arena Rating Categories</h4>
+              <div class="space-y-3">
+                <div class="flex justify-between bg-white/5 rounded-lg p-3">
+                  <span class="text-chess-light">Arena International Master</span>
+                  <span class="text-chess-accent font-semibold">Arena Title</span>
+                </div>
+                <div class="flex justify-between bg-white/5 rounded-lg p-3">
+                  <span class="text-chess-light">Arena FIDE Master</span>
+                  <span class="text-chess-accent font-semibold">Arena Title</span>
+                </div>
+                <div class="flex justify-between bg-white/5 rounded-lg p-3">
+                  <span class="text-chess-light">Arena Federation Master</span>
+                  <span class="text-chess-accent font-semibold">Arena Title</span>
+                </div>
+                <div class="flex justify-between bg-white/5 rounded-lg p-3">
+                  <span class="text-chess-light">Class Players</span>
+                  <span class="text-chess-accent font-semibold">1400-1699</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Player Summary Table -->
+          <div class="bg-white/5 rounded-2xl p-6">
+            <h4 class="font-semibold text-chess-light mb-4 text-center">MKCA Player Summary</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="border-b border-chess-accent/30">
+                    <th class="text-left py-3 px-2 text-chess-accent font-semibold">Player</th>
+                    <th class="text-center py-3 px-2 text-chess-accent font-semibold">Arena Title</th>
+                    <th class="text-center py-3 px-2 text-chess-accent font-semibold">Standard</th>
+                    <th class="text-center py-3 px-2 text-chess-accent font-semibold">Rapid</th>
+                    <th class="text-center py-3 px-2 text-chess-accent font-semibold">Blitz</th>
+                    <th class="text-center py-3 px-2 text-chess-accent font-semibold">FIDE ID</th>
+                  </tr>
+                </thead>
+                <tbody class="text-chess-light/80">
+                  <tr class="border-b border-white/10">
+                    <td class="py-3 px-2 font-semibold">Dishanthan V.</td>
+                    <td class="py-3 px-2 text-center text-xs">Arena Int'l Master</td>
+                    <td class="py-3 px-2 text-center text-chess-accent font-semibold">1637</td>
+                    <td class="py-3 px-2 text-center text-chess-accent font-semibold">1504</td>
+                    <td class="py-3 px-2 text-center text-chess-accent font-semibold">1553</td>
+                    <td class="py-3 px-2 text-center">9972951</td>
+                  </tr>
+                  <tr class="border-b border-white/10">
+                    <td class="py-3 px-2 font-semibold">Tharsikan V.</td>
+                    <td class="py-3 px-2 text-center text-xs">Arena Fed Master</td>
+                    <td class="py-3 px-2 text-center text-chess-accent font-semibold">1527</td>
+                    <td class="py-3 px-2 text-center text-chess-light/60">N/A</td>
+                    <td class="py-3 px-2 text-center text-chess-accent font-semibold">1403</td>
+                    <td class="py-3 px-2 text-center">29994934</td>
+                  </tr>
+                  <tr class="border-b border-white/10">
+                    <td class="py-3 px-2 font-semibold">Karthiheyan S.</td>
+                    <td class="py-3 px-2 text-center text-xs">Arena FIDE Master</td>
+                    <td class="py-3 px-2 text-center text-chess-light/60">N/A</td>
+                    <td class="py-3 px-2 text-center text-chess-accent font-semibold">1648</td>
+                    <td class="py-3 px-2 text-center text-chess-accent font-semibold">1491</td>
+                    <td class="py-3 px-2 text-center">80851312</td>
+                  </tr>
+                  <tr>
+                    <td class="py-3 px-2 font-semibold">Rajina K.</td>
+                    <td class="py-3 px-2 text-center text-xs">Arena FIDE Master</td>
+                    <td class="py-3 px-2 text-center text-chess-accent font-semibold">1502</td>
+                    <td class="py-3 px-2 text-center text-chess-light/60">N/A</td>
+                    <td class="py-3 px-2 text-center text-chess-light/60">N/A</td>
+                    <td class="py-3 px-2 text-center">9987215</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-chess-light/60 text-xs mt-4 text-center">
+              All players joined MKCA in June 2025 and represent Sri Lanka (SRI) • 
+              Ratings are from Chess Arena platform • FIDE ratings are provisional
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rising Stars Section -->
+    <section id="rising-stars" class="relative z-10 py-20 px-4">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
+          Rising Stars
+        </h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="w-16 h-16 bg-chess-accent/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <i class="fas fa-star text-2xl text-chess-accent"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold mb-2 text-chess-light">Arena Rated Players</h3>
+            <p class="text-chess-light/80 leading-relaxed mb-4">Players actively competing on Chess Arena platform.</p>
+            <div class="text-2xl font-bold text-chess-accent">4</div>
+            <p class="text-chess-light/60">Active Rated Players</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="w-16 h-16 bg-chess-accent/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <i class="fas fa-trophy text-2xl text-chess-accent"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold mb-2 text-chess-light">Arena Masters</h3>
+            <p class="text-chess-light/80 leading-relaxed mb-4">Players who have achieved Arena titles through competitive play.</p>
+            <div class="text-2xl font-bold text-chess-accent">4</div>
+            <p class="text-chess-light/60">Titled Players</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="w-16 h-16 bg-chess-accent/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <i class="fas fa-chart-line text-2xl text-chess-accent"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold mb-2 text-chess-light">Multi-Format Players</h3>
+            <p class="text-chess-light/80 leading-relaxed mb-4">Players active in Standard, Rapid, and Blitz formats.</p>
+            <div class="text-2xl font-bold text-chess-accent">2</div>
+            <p class="text-chess-light/60">All-Format Players</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="w-16 h-16 bg-chess-accent/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <i class="fas fa-female text-2xl text-chess-accent"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold mb-2 text-chess-light">Women Players</h3>
+            <p class="text-chess-light/80 leading-relaxed mb-4">Strong female players making their mark in competitive chess.</p>
+            <div class="text-2xl font-bold text-chess-accent">1</div>
+            <p class="text-chess-light/60">Rajina K.</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="w-16 h-16 bg-chess-accent/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <i class="fas fa-graduation-cap text-2xl text-chess-accent"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold mb-2 text-chess-light">FIDE Registered</h3>
+            <p class="text-chess-light/80 leading-relaxed mb-4">Players with official FIDE registration for international tournaments.</p>
+            <div class="text-2xl font-bold text-chess-accent">4</div>
+            <p class="text-chess-light/60">FIDE Players</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="w-16 h-16 bg-chess-accent/20 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <i class="fas fa-medal text-2xl text-chess-accent"></i>
+            </div>
+            <h3 class="font-serif text-xl font-bold mb-2 text-chess-light">Online Champions</h3>
+            <p class="text-chess-light/80 leading-relaxed mb-4">Players competing successfully on Chess Arena platform.</p>
+            <div class="text-2xl font-bold text-chess-accent">4</div>
+            <p class="text-chess-light/60">Arena Players</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Player Statistics Section -->
+    <section class="relative z-10 py-20 px-4">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="font-serif text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-chess-accent to-chess-accent-light bg-clip-text text-transparent">
+          Player Statistics
+        </h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-4xl font-bold text-chess-accent mb-4">4</div>
+            <p class="text-chess-light/80">Total rated players in our academy</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-4xl font-bold text-chess-accent mb-4">1543</div>
+            <p class="text-chess-light/80">Average rating of our players</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-8 text-center transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+            <div class="text-4xl font-bold text-chess-accent mb-4">June 2025</div>
+            <p class="text-chess-light/80">All players joined MKCA</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chess Quote Section -->
+    <section class="relative z-10 py-20 px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="bg-white/15 backdrop-blur-2xl border border-white/30 rounded-3xl p-12 transition-transform hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+          <blockquote class="text-2xl md:text-3xl font-serif italic text-chess-light/90 mb-6">
+            "Every chess master was once a beginner."
+          </blockquote>
+          <cite class="text-chess-accent font-semibold">— Irving Chernev</cite>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact" class="relative z-10 w-full py-12 px-4 mt-20">
+      <div class="max-w-6xl mx-auto">
+        <div class="bg-white/15 backdrop-blur-2xl border border-white/30 rounded-3xl p-8 md:p-12">
+          <div class="grid md:grid-cols-3 gap-8 mb-8">
+            <div class="text-center md:text-left">
+              <h3 class="font-serif text-2xl font-bold text-chess-accent mb-4 flex items-center justify-center md:justify-start">
+                <i class="fas fa-chess-knight mr-2"></i>
+                Magical Knight Chess Academy
+              </h3>
+              <p class="text-chess-light/80">Elevating minds through the royal game of chess.</p>
+            </div>
+            <div class="hidden md:block"></div>
+            <div class="text-center md:text-right">
+              <h4 class="font-semibold text-chess-light mb-4">Contact Info</h4>
+              <div class="text-chess-light/80 space-y-2">
+                <div class="flex items-center justify-center md:justify-end">
+                  <i class="fas fa-phone mr-2 text-chess-accent"></i>
+                  <span>+94 75 317 5528 – Tharsikan.V</span>
+                </div>
+                <div class="flex items-center justify-center md:justify-end">
+                  <i class="fas fa-phone mr-2 text-chess-accent"></i>
+                  <span>+94 77 527 3514 – Dishanthan.V</span>
+                </div>
+              </div>
+              <h4 class="font-semibold text-chess-light mb-4 mt-6">Follow Us</h4>
+              <div class="text-chess-light/80">
+                <a
+                  href="https://web.facebook.com/magicalknightchessacademykilinochchi"
+                  class="flex items-center justify-center md:justify-end hover:text-chess-accent transition-all duration-300"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i class="fab fa-facebook-f mr-2 text-chess-accent"></i>
+                  <span>Magical Knight Chess Academy</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-chess-accent/20 pt-8 text-center">
+            <p class="text-chess-light/70 mb-4">© 2025 Senzura codeLabs. All rights reserved.</p>
+            <p class="text-chess-light/60">
+              Crafted with
+              <span class="text-red-500 animate-pulse">❤</span> by
+              <a
+                href="https://www.senzura.tech/"
+                class="text-chess-accent hover:text-chess-accent-light transition-all duration-300 underline underline-offset-2 hover:underline-offset-4 ml-1"
+              >
+                <i class="fab fa-github mr-1"></i>Senzura codeLabs
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 z-30 bg-white/15 backdrop-blur-2xl border border-white/30 rounded-full p-4 text-chess-accent hover:text-chess-accent-light transition-all duration-300 opacity-0 pointer-events-none hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(212,175,55,0.3)]">
+      <i class="fas fa-chevron-up text-xl"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script>
+
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute("href"));
+          if (target) {
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+            const mobileMenu = document.getElementById("mobile-menu");
+            const menuButton = document.getElementById("menu-button");
+            if (!mobileMenu.classList.contains("translate-x-full")) {
+              mobileMenu.classList.add("translate-x-full");
+              menuButton.innerHTML = '<i class="fas fa-bars text-2xl"></i>';
+              setTimeout(() => {
+                mobileMenu.classList.add("hidden");
+              }, 300);
+            }
+          }
+        });
+      });
+
+      const backToTopButton = document.getElementById("backToTop");
+      window.addEventListener("scroll", () => {
+        if (window.pageYOffset > 300) {
+          backToTopButton.style.opacity = "1";
+          backToTopButton.style.pointerEvents = "auto";
+        } else {
+          backToTopButton.style.opacity = "0";
+          backToTopButton.style.pointerEvents = "none";
+        }
+      });
+
+      backToTopButton.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      });
+
+
+
+      window.addEventListener("load", () => {
+        document.body.classList.add("loaded");
+      });
+    </script>
+  </body>
+</html>

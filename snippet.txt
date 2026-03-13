@@ -1,0 +1,15 @@
+    // Academy Hours Update
+    document.addEventListener("DOMContentLoaded", () => {
+      const now = new Date();
+      const hours = now.getHours();
+      const messageElement = document.getElementById("academy-message");
+      if (messageElement) {
+        if (hours >= 8 && hours < 21) {
+          messageElement.textContent = "Academy doors are open!";
+        } else {
+          messageElement.textContent = "We're done for the day. Catch you tomorrow!";
+        }
+      }
+    });
+
+    // Old Modals & Extras
