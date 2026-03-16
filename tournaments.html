@@ -248,6 +248,32 @@
             </div>
           </div>
 
+          <!-- Match Countdown -->
+          <div class="mb-8">
+            <h4 class="font-heading tracking-wide text-2xl font-bold text-chess-accent mb-4 text-center flex items-center justify-center gap-2">
+              <i class="fas fa-hourglass-half animate-pulse"></i> Match Starts In
+            </h4>
+            <div id="match-countdown" class="grid grid-cols-4 gap-3 md:gap-6 max-w-xl mx-auto">
+              <div class="bg-chess-800/60 border border-chess-accent/20 rounded-2xl p-4 text-center">
+                <span id="match-days" class="font-heading text-4xl md:text-5xl font-bold text-chess-accent block leading-none">00</span>
+                <span class="text-xs text-slate-400 uppercase tracking-widest mt-2 block">Days</span>
+              </div>
+              <div class="bg-chess-800/60 border border-chess-accent/20 rounded-2xl p-4 text-center">
+                <span id="match-hours" class="font-heading text-4xl md:text-5xl font-bold text-chess-accent block leading-none">00</span>
+                <span class="text-xs text-slate-400 uppercase tracking-widest mt-2 block">Hours</span>
+              </div>
+              <div class="bg-chess-800/60 border border-chess-accent/20 rounded-2xl p-4 text-center">
+                <span id="match-minutes" class="font-heading text-4xl md:text-5xl font-bold text-chess-accent block leading-none">00</span>
+                <span class="text-xs text-slate-400 uppercase tracking-widest mt-2 block">Minutes</span>
+              </div>
+              <div class="bg-chess-800/60 border border-chess-accent/20 rounded-2xl p-4 text-center">
+                <span id="match-seconds" class="font-heading text-4xl md:text-5xl font-bold text-chess-accent block leading-none">00</span>
+                <span class="text-xs text-slate-400 uppercase tracking-widest mt-2 block">Seconds</span>
+              </div>
+            </div>
+            <p id="match-countdown-msg" class="text-center text-slate-400 text-sm mt-3"></p>
+          </div>
+
           <!-- Age Categories -->
           <div class="mb-8">
             <h4 class="font-heading tracking-wide text-2xl font-bold text-chess-accent mb-6 text-center">Age Categories</h4>
@@ -878,6 +904,38 @@
       }, 1000);
     }
     
+    // Match Countdown – April 1, 2026 at 08:30 AM
+    (function () {
+      const matchDate = new Date("April 1, 2026 08:30:00").getTime();
+      const dEl = document.getElementById("match-days");
+      const hEl = document.getElementById("match-hours");
+      const mEl = document.getElementById("match-minutes");
+      const sEl = document.getElementById("match-seconds");
+      const msgEl = document.getElementById("match-countdown-msg");
+      if (!dEl) return;
+
+      function tick() {
+        const now = new Date().getTime();
+        const distance = matchDate - now;
+        if (distance <= 0) {
+          dEl.textContent = hEl.textContent = mEl.textContent = sEl.textContent = "00";
+          if (msgEl) msgEl.textContent = "🎉 The tournament has started! Good luck to all players!";
+          return;
+        }
+        const days    = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours   = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        dEl.textContent = String(days).padStart(2, "0");
+        hEl.textContent = String(hours).padStart(2, "0");
+        mEl.textContent = String(minutes).padStart(2, "0");
+        sEl.textContent = String(seconds).padStart(2, "0");
+        if (msgEl) msgEl.textContent = "Wednesday, 01 April 2026 · 8:30 AM · Kilinochchi Maha Vidyalayam";
+      }
+      tick();
+      setInterval(tick, 1000);
+    })();
+
     // Smooth scrolling
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         anchor.addEventListener("click", function (e) {
