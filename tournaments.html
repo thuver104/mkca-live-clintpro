@@ -229,7 +229,7 @@
             <div class="bg-chess-800/40 border-none rounded-[1.5rem] p-6 text-center">
               <i class="fas fa-calendar-alt text-2xl text-chess-accent mb-3"></i>
               <h4 class="font-semibold text-chess-100 mb-2">Date</h4>
-              <p class="text-chess-100/80">Wednesday, 01 April 2026</p>
+              <p class="text-chess-100/80">Wednesday, 08 APR 2026</p>
             </div>
             <div class="bg-chess-800/40 border-none rounded-[1.5rem] p-6 text-center">
               <i class="fas fa-clock text-2xl text-chess-accent mb-3"></i>
@@ -904,9 +904,9 @@
       }, 1000);
     }
     
-    // Match Countdown – April 1, 2026 at 08:30 AM
+    // Match Countdown – April 8, 2026 at 08:30 AM
     (function () {
-      const matchDate = new Date("April 1, 2026 08:30:00").getTime();
+      const matchDate = new Date("April 8, 2026 08:30:00").getTime();
       const dEl = document.getElementById("match-days");
       const hEl = document.getElementById("match-hours");
       const mEl = document.getElementById("match-minutes");
@@ -930,7 +930,7 @@
         hEl.textContent = String(hours).padStart(2, "0");
         mEl.textContent = String(minutes).padStart(2, "0");
         sEl.textContent = String(seconds).padStart(2, "0");
-        if (msgEl) msgEl.textContent = "Wednesday, 01 April 2026 · 8:30 AM · Kilinochchi Maha Vidyalayam";
+        if (msgEl) msgEl.textContent = "Wednesday, 08 APR 2026 · 8:30 AM · Kilinochchi Maha Vidyalayam";
       }
       tick();
       setInterval(tick, 1000);
