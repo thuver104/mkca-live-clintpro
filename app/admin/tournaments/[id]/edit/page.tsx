@@ -9,6 +9,7 @@ export default function EditTournamentPage({ params }: { params: Promise<{ id: s
   const [form, setForm] = useState<Record<string, string | boolean>>({
     title: "", description: "", date: "", time: "", venue: "", entryFee: "",
     status: "upcoming", featured: false, registrationOpen: true,
+    registrationFormId: "",
     ageCategories: "", prizes: "", pdfUrl: "", whatsappLink: "", registrationLink: "", venueMapLink: "",
   });
   const [saving, setSaving] = useState(false);
@@ -20,6 +21,7 @@ export default function EditTournamentPage({ params }: { params: Promise<{ id: s
         title: d.title || "", description: d.description || "", date: d.date || "", time: d.time || "",
         venue: d.venue || "", entryFee: d.entryFee || "", status: d.status || "upcoming",
         featured: d.featured || false, registrationOpen: d.registrationOpen ?? true,
+        registrationFormId: d.registrationFormId || "",
         ageCategories: Array.isArray(d.ageCategories) ? d.ageCategories.join(", ") : (d.ageCategories || ""),
         prizes: d.prizes || "", pdfUrl: d.pdfUrl || "", whatsappLink: d.whatsappLink || "",
         registrationLink: d.registrationLink || "", venueMapLink: d.venueMapLink || "",
@@ -82,7 +84,7 @@ export default function EditTournamentPage({ params }: { params: Promise<{ id: s
         </div>
         {input("PDF URL", "pdfUrl")}
         {input("WhatsApp Link", "whatsappLink")}
-        {input("Registration Link", "registrationLink")}
+        {input("Registration Form ID (from Forms section)", "registrationFormId")}
         {input("Venue Map Link", "venueMapLink")}
         <div className="flex gap-6">
           <label className="flex items-center gap-3 cursor-pointer">

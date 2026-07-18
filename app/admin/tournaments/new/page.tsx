@@ -8,6 +8,7 @@ export default function NewTournamentPage() {
   const [form, setForm] = useState({
     title: "", description: "", date: "", time: "", venue: "", entryFee: "",
     status: "upcoming", featured: false, registrationOpen: true,
+    registrationFormId: "",
     ageCategories: "", prizes: "", pdfUrl: "", whatsappLink: "", registrationLink: "", venueMapLink: "",
   });
   const [saving, setSaving] = useState(false);
@@ -57,7 +58,7 @@ export default function NewTournamentPage() {
         </div>
         {input("PDF URL", "pdfUrl")}
         {input("WhatsApp Link", "whatsappLink")}
-        {input("Registration Link", "registrationLink")}
+        {input("Registration Form ID (from Forms section)", "registrationFormId")}
         {input("Venue Map Link", "venueMapLink")}
         <div className="flex gap-6">
           <label className="flex items-center gap-3 cursor-pointer">

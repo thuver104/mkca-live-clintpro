@@ -114,16 +114,25 @@ export default async function Home() {
 
             {/* CTAs */}
             <div className="hero-cta mt-8 flex flex-col sm:flex-row gap-3">
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform?usp=header"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-glow relative bg-gradient-to-r from-chess-accent to-amber-500 text-gray-950 font-bold px-8 py-4 rounded-2xl hover:from-chess-accentHover hover:to-yellow-400 transition-all duration-300 inline-flex items-center justify-center gap-3 text-lg shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <i className="fas fa-chess-knight text-xl"></i>
-                Register Now
-                <i className="fas fa-arrow-right text-sm"></i>
-              </a>
+              {featuredTournament?.registrationOpen && featuredTournament?.registrationFormId ? (
+                <Link
+                  href={`/register?form=${featuredTournament.registrationFormId}`}
+                  className="btn-glow relative bg-gradient-to-r from-chess-accent to-amber-500 text-gray-950 font-bold px-8 py-4 rounded-2xl hover:from-chess-accentHover hover:to-yellow-400 transition-all duration-300 inline-flex items-center justify-center gap-3 text-lg shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <i className="fas fa-chess-knight text-xl"></i>
+                  Register Now
+                  <i className="fas fa-arrow-right text-sm"></i>
+                </Link>
+              ) : (
+                <Link
+                  href="/tournaments"
+                  className="btn-glow relative bg-gradient-to-r from-chess-accent to-amber-500 text-gray-950 font-bold px-8 py-4 rounded-2xl hover:from-chess-accentHover hover:to-yellow-400 transition-all duration-300 inline-flex items-center justify-center gap-3 text-lg shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <i className="fas fa-chess-knight text-xl"></i>
+                  View Tournaments
+                  <i className="fas fa-arrow-right text-sm"></i>
+                </Link>
+              )}
               <Link
                 href="/tournaments"
                 className="glass-card border border-chess-700/50 text-chess-100 font-semibold px-7 py-4 rounded-2xl hover:bg-white/[0.08] hover:border-chess-accent/30 transition-all duration-300 inline-flex items-center justify-center gap-2.5 backdrop-blur-xl hover:scale-[1.02] active:scale-[0.98]"
@@ -258,24 +267,24 @@ export default async function Home() {
                   </div>
 
                   <div className="font-heading tracking-wide text-xl font-bold text-chess-accent relative">
-                    Magical Knight Classic
+                    {featuredTournament?.title || "No upcoming tournament"}
                   </div>
                   <div className="text-xs text-chess-100/50 mt-1.5 relative">
                     <i className="far fa-calendar mr-1"></i>
-                    08 APR 2026 &bull; Registration open
+                    {featuredTournament?.date || "TBA"}
+                    {featuredTournament?.registrationOpen ? " • Registration open" : ""}
                   </div>
 
                   <div className="grid grid-cols-2 gap-2.5 mt-4 relative">
-                    <a
-                      href="/pdf/magical-knight-classic-chess-tournament-2026.pdf"
-                      target="_blank"
-                      className="bg-chess-accent/90 text-gray-950 text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-chess-accentHover transition-all duration-300 inline-flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                      <i className="fas fa-file-pdf"></i>
-                      PDF
-                    </a>
+                    {featuredTournament?.pdfUrl && (
+                      <a href={featuredTournament.pdfUrl} target="_blank" rel="noopener noreferrer"
+                        className="bg-chess-accent/90 text-gray-950 text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-chess-accentHover transition-all duration-300 inline-flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]">
+                        <i className="fas fa-file-pdf"></i>
+                        PDF
+                      </a>
+                    )}
                     <Link
-                      href="/tournaments#current-tournament"
+                      href="/tournaments"
                       className="glass-card border border-chess-700/50 text-chess-100 text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-white/[0.08] transition-all duration-300 inline-flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
                     >
                       <i className="fas fa-arrow-right text-chess-accent"></i>

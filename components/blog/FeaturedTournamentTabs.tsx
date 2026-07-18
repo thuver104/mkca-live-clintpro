@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 const TABS = [
@@ -93,15 +94,13 @@ export function FeaturedTournamentTabs() {
             <i className="fab fa-whatsapp text-3xl text-[#25D366] group-hover:text-chess-950 mb-2"></i>
             <span className="font-semibold text-sm">Join WhatsApp</span>
           </a>
-          <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfVslF3X-SlvlaXh2MDXf9yGmlXu-yPIR23mtNhusEAguwq5Q/viewform?usp=header"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/register/academy"
             className="flex flex-col items-center justify-center p-4 rounded-xl bg-chess-blue/10 border border-chess-blue/30 text-white hover:bg-chess-blue hover:text-chess-950 transition-all duration-300 group"
           >
             <i className="fas fa-file-signature text-3xl text-chess-blue group-hover:text-chess-950 mb-2"></i>
-            <span className="font-semibold text-sm">Register Form</span>
-          </a>
+            <span className="font-semibold text-sm">Register Now</span>
+          </Link>
           <a
             href="https://maps.app.goo.gl/dcpZejA6bcFdtbQq5"
             target="_blank"

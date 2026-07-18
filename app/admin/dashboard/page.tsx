@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
-  const [counts, setCounts] = useState({ blogs: 0, tournaments: 0, players: 0, coaches: 0, submissions: 0 });
+  const [counts, setCounts] = useState({ blogs: 0, tournaments: 0, players: 0, coaches: 0, submissions: 0, forms: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,13 +14,15 @@ export default function AdminDashboard() {
       fetch("/api/players").then((r) => r.json()),
       fetch("/api/coaches").then((r) => r.json()),
       fetch("/api/submissions").then((r) => r.json()),
-    ]).then(([blogs, tournaments, players, coaches, submissions]) => {
+      fetch("/api/forms").then((r) => r.json()),
+    ]).then(([blogs, tournaments, players, coaches, submissions, forms]) => {
       setCounts({
         blogs: Array.isArray(blogs) ? blogs.length : 0,
         tournaments: Array.isArray(tournaments) ? tournaments.length : 0,
         players: Array.isArray(players) ? players.length : 0,
         coaches: Array.isArray(coaches) ? coaches.length : 0,
         submissions: Array.isArray(submissions) ? submissions.length : 0,
+        forms: Array.isArray(forms) ? forms.length : 0,
       });
       setLoading(false);
     });
@@ -31,6 +33,7 @@ export default function AdminDashboard() {
     { label: "Tournaments", value: counts.tournaments, icon: "fa-trophy", color: "text-chess-accent", bg: "bg-chess-accent/10", href: "/admin/tournaments" },
     { label: "Players", value: counts.players, icon: "fa-chess-pawn", color: "text-emerald-400", bg: "bg-emerald-400/10", href: "/admin/players" },
     { label: "Coaches", value: counts.coaches, icon: "fa-chalkboard-teacher", color: "text-purple-400", bg: "bg-purple-400/10", href: "/admin/coaches" },
+    { label: "Forms", value: counts.forms, icon: "fa-file-lines", color: "text-cyan-400", bg: "bg-cyan-400/10", href: "/admin/forms" },
     { label: "Submissions", value: counts.submissions, icon: "fa-table-list", color: "text-rose-400", bg: "bg-rose-400/10", href: "/admin/submissions" },
   ];
 
@@ -51,7 +54,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4 mb-10">
         {stats.map((s) => (
           <Link
             key={s.label}
