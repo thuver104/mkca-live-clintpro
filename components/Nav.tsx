@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const REGISTER_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform";
@@ -19,6 +19,24 @@ const NAV_LINKS = [
 export function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y < 60) {
+        setHidden(false);
+      } else if (y > lastScrollY.current + 10) {
+        setHidden(true);
+      } else if (y < lastScrollY.current - 10) {
+        setHidden(false);
+      }
+      lastScrollY.current = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const isActive = (href: string) => {
     if (href === "/#contact") return false;
@@ -28,7 +46,11 @@ export function Nav() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-50 p-4 sm:p-6 pointer-events-none">
+      <div
+        className={`fixed top-0 left-0 right-0 z-50 p-4 sm:p-6 pointer-events-none transition-transform duration-300 ease-in-out ${
+          hidden ? "-translate-y-full" : "translate-y-0"
+        }`}
+      >
         <nav className="glass-nav max-w-6xl mx-auto rounded-full px-6 py-3 flex items-center justify-between pointer-events-auto shadow-2xl shadow-black/50 transition-all duration-300 transform hover:scale-[1.01]">
           <Link href="/" className="flex items-center gap-3 group">
             <Image

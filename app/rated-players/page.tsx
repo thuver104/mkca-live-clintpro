@@ -6,17 +6,27 @@ import {
   arenaRatingCategories,
   fideRatingCategories,
   playerStats,
-  players,
   risingStars,
   titleCategories,
 } from "@/lib/data/players";
+import { getDb } from "@/lib/mongodb";
+
+async function getPlayers() {
+  try {
+    const db = await getDb();
+    return await db.collection("players").find().sort({ order: 1 }).toArray();
+  } catch {
+    return [];
+  }
+}
 
 export const metadata: Metadata = {
   title: "Rated Players | MKCA",
   description: "Meet MKCA's officially rated chess players — Arena and FIDE titles, ratings, and profiles.",
 };
 
-export default function RatedPlayersPage() {
+export default async function RatedPlayersPage() {
+  const playersData = (await getPlayers()) as unknown as { name: string; photo: string; title: string; titleShort: string; subtitle: string; standard: number | null; rapid: number | null; blitz: number | null; fideId: string; arenaProfileUrl: string }[];
   return (
     <>
       {/* Hero Section */}
@@ -74,7 +84,7 @@ export default function RatedPlayersPage() {
               Featured Players
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {players.map((player) => (
+              {playersData.map((player) => (
                 <PlayerCard key={player.name} player={player} />
               ))}
             </div>
@@ -126,8 +136,8 @@ export default function RatedPlayersPage() {
                     </tr>
                   </thead>
                   <tbody className="text-chess-100/80">
-                    {players.map((player, i) => (
-                      <tr key={player.name} className={i < players.length - 1 ? "border-b border-white/10" : ""}>
+                    {playersData.map((player, i) => (
+                      <tr key={player.name} className={i < playersData.length - 1 ? "border-b border-white/10" : ""}>
                         <td className="py-3 px-2 font-semibold">{player.name}</td>
                         <td className="py-3 px-2 text-center text-xs">{player.titleShort}</td>
                         <td className="py-3 px-2 text-center">

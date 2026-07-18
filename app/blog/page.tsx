@@ -4,6 +4,16 @@ import Link from "next/link";
 import { MediaModalProvider } from "@/components/MediaModalProvider";
 import { FeaturedTournamentTabs } from "@/components/blog/FeaturedTournamentTabs";
 import { EventSpotlightMedia } from "@/components/blog/EventSpotlightMedia";
+import { getDb } from "@/lib/mongodb";
+
+async function getBlogs() {
+  try {
+    const db = await getDb();
+    return await db.collection("blogs").find({ published: true }).sort({ createdAt: -1 }).toArray();
+  } catch {
+    return [];
+  }
+}
 
 export const metadata: Metadata = {
   title: "Blog & Announcements | MKCA",
@@ -17,7 +27,8 @@ const CONTENT_CARDS = [
   { href: "#", icon: "fa-users", iconColor: "text-green-400", title: "Academy News", description: "Updates, player achievements, and daily stories from MKCA.", shadow: "hover:shadow-[0_15px_40px_rgba(34,197,94,0.15)] hover:border-green-500/50", lift: true },
 ];
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const blogsData = await getBlogs();
   return (
     <>
       {/* Hero Section */}

@@ -4,8 +4,35 @@ import { CoachCard } from "@/components/CoachCard";
 import { GalleryCard } from "@/components/GalleryCard";
 import { QuoteCard } from "@/components/QuoteCard";
 import { StatGrid } from "@/components/StatGrid";
-import { coaches } from "@/lib/data/coaches";
+import { getDb } from "@/lib/mongodb";
 import { achievementGallery } from "@/lib/data/achievements";
+
+async function getCoaches() {
+  try {
+    const db = await getDb();
+    return await db.collection("coaches").find().sort({ order: 1 }).toArray();
+  } catch {
+    return [];
+  }
+}
+
+async function getPlayers() {
+  try {
+    const db = await getDb();
+    return await db.collection("players").find().sort({ order: 1 }).toArray();
+  } catch {
+    return [];
+  }
+}
+
+async function getTournaments() {
+  try {
+    const db = await getDb();
+    return await db.collection("tournaments").find().sort({ date: -1 }).toArray();
+  } catch {
+    return [];
+  }
+}
 
 const FEATURES = [
   { icon: "fa-graduation-cap", title: "Expert Instruction", description: "Learn from grandmasters and certified instructors with decades of competitive experience." },
@@ -34,151 +61,244 @@ const RAPID_TOURNAMENT_IMAGES = [
   { src: "/images/gallery/rapid-tournament-2025/IMG-20250608-WA0109.jpg", alt: "Match 3" },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const [coachesData, playersData, tournamentsData] = await Promise.all([getCoaches(), getPlayers(), getTournaments()]);
+  const typed = tournamentsData as unknown as { featured?: boolean; status?: string; title?: string; date?: string; registrationFormId?: string; pdfUrl?: string; _id?: string; registrationOpen?: boolean }[];
+  const featuredTournament = typed.find((t) => t.featured && t.status !== "completed") || typed.find((t) => t.status === "upcoming");
+  const statsCount = { students: playersData.length, coaches: coachesData.length, tournaments: tournamentsData.length };
   return (
     <>
       {/* Hero Section */}
-      <section className="relative z-10 pt-32 md:pt-40 lg:pt-48 pb-12 md:pb-16 px-4">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-8 items-center">
-          <div className="lg:col-span-7">
-            <div className="inline-flex items-center gap-2 glass-card border-none border border-chess-700/50 rounded-full px-4 py-2 mb-6 backdrop-blur-xl">
-              <span className="text-chess-accent font-semibold">MKCA</span>
-              <span className="text-slate-400">•</span>
-              <span className="text-chess-100/80 text-sm">Magical Knight Chess Academy</span>
+      <section className="relative z-10 min-h-screen flex flex-col justify-center pt-24 md:pt-32 pb-8 px-4 overflow-hidden">
+        {/* Chess pattern overlay */}
+        <div className="absolute inset-0 chess-pattern opacity-40 pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-8 lg:gap-12 items-center relative">
+          {/* Left Column — Text & CTAs */}
+          <div className="lg:col-span-7 hero-left">
+            {/* Badge */}
+            <div className="hero-badge inline-flex items-center gap-2.5 glass-card rounded-full px-5 py-2.5 mb-8 border border-chess-700/50">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-chess-100/90 text-sm font-medium">MKCA &mdash; Magical Knight Chess Academy</span>
             </div>
 
-            <h1 className="font-heading tracking-wide font-bold text-4xl md:text-6xl lg:text-7xl leading-tight drop-shadow-2xl">
-              <span className="text-gradient-gold">Sharpen</span> your mind.
-              <br />
-              Master the game.
-            </h1>
+            {/* Heading */}
+            <div className="hero-heading">
+              <h1 className="font-heading tracking-tight font-extrabold text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5.25rem] leading-[1.05]">
+                <span className="text-gradient-gold-shimmer">Sharpen</span>
+                <span className="text-chess-100"> your mind.</span>
+                <br />
+                <span className="text-chess-100">Master the </span>
+                <span className="text-gradient-gold relative">
+                  game.
+                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
+                    <path d="M2 8 C50 2, 150 2, 198 8" stroke="url(#gold-underline)" strokeWidth="3" strokeLinecap="round" className="line-expand" />
+                    <defs>
+                      <linearGradient id="gold-underline" x1="0" y1="0" x2="200" y2="0">
+                        <stop offset="0%" stopColor="#fbbf24" />
+                        <stop offset="100%" stopColor="#d97706" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </span>
+              </h1>
+            </div>
 
-            <p className="mt-5 text-base md:text-lg text-chess-100/80 max-w-2xl leading-relaxed">
+            {/* Subtitle */}
+            <p className="hero-sub mt-6 text-lg md:text-xl text-chess-100/70 max-w-xl leading-relaxed">
               Build strategy, confidence, and competitive excellence — with training and tournaments guided by MKCA.
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            {/* CTAs */}
+            <div className="hero-cta mt-8 flex flex-col sm:flex-row gap-3">
               <a
                 href="https://docs.google.com/forms/d/e/1FAIpQLSfYgU1wGA43ZoiLstBRc-phXF7H_BOO88Ex5Xw0d9I5SaeVfg/viewform?usp=header"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-chess-accent text-gray-900 font-semibold px-6 py-3 rounded-xl hover:bg-chess-accentHover transition-colors duration-300 inline-flex items-center justify-center gap-2"
+                className="btn-glow relative bg-gradient-to-r from-chess-accent to-amber-500 text-gray-950 font-bold px-8 py-4 rounded-2xl hover:from-chess-accentHover hover:to-yellow-400 transition-all duration-300 inline-flex items-center justify-center gap-3 text-lg shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:scale-[1.02] active:scale-[0.98]"
               >
-                <i className="fas fa-chess-knight"></i>
+                <i className="fas fa-chess-knight text-xl"></i>
                 Register Now
+                <i className="fas fa-arrow-right text-sm"></i>
               </a>
               <Link
                 href="/tournaments"
-                className="glass-card border border-chess-700/50 text-chess-100 font-semibold px-6 py-3 rounded-xl hover:bg-white/5 transition-colors duration-300 inline-flex items-center justify-center gap-2 backdrop-blur-xl"
+                className="glass-card border border-chess-700/50 text-chess-100 font-semibold px-7 py-4 rounded-2xl hover:bg-white/[0.08] hover:border-chess-accent/30 transition-all duration-300 inline-flex items-center justify-center gap-2.5 backdrop-blur-xl hover:scale-[1.02] active:scale-[0.98]"
               >
-                <i className="fas fa-trophy"></i>
+                <i className="fas fa-trophy text-chess-accent"></i>
                 View Tournaments
               </Link>
               <Link
                 href="/blog"
-                className="glass-card border border-chess-700/50 text-chess-100 font-semibold px-6 py-3 rounded-xl hover:bg-white/5 transition-colors duration-300 inline-flex items-center justify-center gap-2 backdrop-blur-xl"
+                className="glass-card border border-chess-700/50 text-chess-100 font-semibold px-7 py-4 rounded-2xl hover:bg-white/[0.08] hover:border-chess-accent/30 transition-all duration-300 inline-flex items-center justify-center gap-2.5 backdrop-blur-xl hover:scale-[1.02] active:scale-[0.98]"
               >
-                <i className="fas fa-newspaper"></i>
+                <i className="fas fa-newspaper text-chess-blue"></i>
                 Read Blog
               </Link>
             </div>
 
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="glass-card border border-chess-700/50 rounded-[1.5rem] p-4 backdrop-blur-xl">
-                <div className="text-chess-accent font-semibold">Coaching</div>
-                <div className="text-sm text-chess-100/80">All levels, structured learning</div>
+            {/* Stats Strip */}
+            <div className="hero-stats mt-10 flex items-center gap-0">
+              <div className="flex flex-col items-center px-5 md:px-7 first:pl-0">
+                <span className="font-heading text-2xl md:text-3xl font-bold text-chess-accent">{statsCount.students}+</span>
+                <span className="text-xs md:text-sm text-chess-100/50 mt-0.5">Students</span>
               </div>
-              <div className="glass-card border border-chess-700/50 rounded-[1.5rem] p-4 backdrop-blur-xl">
-                <div className="text-chess-accent font-semibold">Tournaments</div>
-                <div className="text-sm text-chess-100/80">Play, improve, compete</div>
+              <div className="w-px h-10 bg-chess-700/50"></div>
+              <div className="flex flex-col items-center px-5 md:px-7">
+                <span className="font-heading text-2xl md:text-3xl font-bold text-chess-accent">{statsCount.coaches}+</span>
+                <span className="text-xs md:text-sm text-chess-100/50 mt-0.5">Coaches</span>
               </div>
-              <div className="glass-card border border-chess-700/50 rounded-[1.5rem] p-4 backdrop-blur-xl">
-                <div className="text-chess-accent font-semibold">Community</div>
-                <div className="text-sm text-chess-100/80">Northern chess growth</div>
+              <div className="w-px h-10 bg-chess-700/50"></div>
+              <div className="flex flex-col items-center px-5 md:px-7">
+                <span className="font-heading text-2xl md:text-3xl font-bold text-chess-accent">{statsCount.tournaments}+</span>
+                <span className="text-xs md:text-sm text-chess-100/50 mt-0.5">Tournaments</span>
+              </div>
+              <div className="w-px h-10 bg-chess-700/50 hidden sm:block"></div>
+              <div className="hidden sm:flex flex-col items-center px-5 md:px-7">
+                <span className="font-heading text-2xl md:text-3xl font-bold text-chess-accent">8</span>
+                <span className="text-xs md:text-sm text-chess-100/50 mt-0.5">Years</span>
+              </div>
+            </div>
+
+            {/* Feature Tags */}
+            <div className="hero-features mt-8 flex flex-wrap gap-3">
+              <div className="glass-card border border-chess-700/30 rounded-full px-5 py-2.5 flex items-center gap-2.5 backdrop-blur-xl hover:border-chess-accent/40 transition-colors duration-300">
+                <i className="fas fa-graduation-cap text-chess-accent text-sm"></i>
+                <span className="text-sm font-medium text-chess-100/80">Expert Coaching</span>
+              </div>
+              <div className="glass-card border border-chess-700/30 rounded-full px-5 py-2.5 flex items-center gap-2.5 backdrop-blur-xl hover:border-chess-accent/40 transition-colors duration-300">
+                <i className="fas fa-trophy text-chess-accent text-sm"></i>
+                <span className="text-sm font-medium text-chess-100/80">Tournaments</span>
+              </div>
+              <div className="glass-card border border-chess-700/30 rounded-full px-5 py-2.5 flex items-center gap-2.5 backdrop-blur-xl hover:border-chess-accent/40 transition-colors duration-300">
+                <i className="fas fa-users text-chess-accent text-sm"></i>
+                <span className="text-sm font-medium text-chess-100/80">Community</span>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="glass-card backdrop-blur-2xl border border-chess-700/50 rounded-[2rem] p-6 md:p-8">
-              <div className="flex items-center justify-between gap-3 mb-4">
-                <div className="inline-flex items-center gap-2">
-                  <i className="fas fa-map-marker-alt text-chess-accent"></i>
-                  <span className="font-semibold text-chess-100">Kilinochchi</span>
-                </div>
-                <span className="text-xs glass-card border border-chess-700/50 text-chess-100 px-3 py-1 rounded-full font-semibold">
-                  Open Hours
-                </span>
-              </div>
+          {/* Right Column — Floating Info Card */}
+          <div className="lg:col-span-5 hero-right">
+            <div className="relative">
+              {/* Decorative glow behind card */}
+              <div className="absolute -inset-4 bg-gradient-to-br from-chess-accent/10 via-transparent to-chess-blue/10 rounded-[3rem] blur-2xl pointer-events-none" />
 
-              <h2 className="font-heading tracking-wide text-2xl md:text-3xl mb-3 text-chess-accent">
-                <AcademyStatus />
-              </h2>
-
-              <p className="text-chess-100/80 mb-6">Near Fashion Bee, Thirunagar, Kilinochchi</p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-                <a
-                  href="https://maps.app.goo.gl/x7ZbwF4F1dKrmtM37"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="glass-card border border-chess-700/50 text-chess-100 font-semibold px-5 py-3 rounded-xl hover:bg-white/5 transition-colors duration-300 inline-flex items-center justify-center gap-2"
-                >
-                  <i className="fas fa-map"></i>
-                  Google Maps
-                </a>
-                <a
-                  href="#coach"
-                  className="glass-card border border-chess-700/50 text-chess-100 font-semibold px-5 py-3 rounded-xl hover:bg-white/5 transition-colors duration-300 inline-flex items-center justify-center gap-2"
-                >
-                  <i className="fas fa-users"></i>
-                  Our Coaches
-                </a>
-              </div>
-
-              <div className="bg-chess-800/40 rounded-[1.5rem] p-5 border border-white/10">
-                <div className="flex items-center justify-between gap-3 mb-2">
-                  <div className="inline-flex items-center gap-2">
-                    <span className="text-xl">🏆</span>
-                    <span className="font-semibold text-chess-100">Next Highlight</span>
+              <div className="glass-card backdrop-blur-2xl border border-chess-700/40 border-glow-card rounded-[2rem] p-7 md:p-8 relative">
+                {/* Header Row */}
+                <div className="flex items-center justify-between mb-5">
+                  <div className="inline-flex items-center gap-2.5">
+                    <div className="w-10 h-10 rounded-xl bg-chess-accent/15 border border-chess-accent/20 flex items-center justify-center">
+                      <i className="fas fa-map-marker-alt text-chess-accent"></i>
+                    </div>
+                    <div>
+                      <div className="font-semibold text-chess-100 text-sm">Kilinochchi</div>
+                      <div className="text-xs text-chess-100/50">Northern Province</div>
+                    </div>
                   </div>
-                  <span className="text-xs glass-card border border-chess-700/50 text-chess-100 px-3 py-1 rounded-full font-semibold">
-                    2026
-                  </span>
+                  <div className="inline-flex items-center gap-1.5 glass-card border border-emerald-500/20 rounded-full px-3 py-1.5">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                    </span>
+                    <span className="text-xs font-medium text-emerald-400">Open Hours</span>
+                  </div>
                 </div>
-                <div className="font-heading tracking-wide text-xl font-bold text-chess-accent">
-                  Magical Knight Classic
-                </div>
-                <div className="text-sm text-chess-100/80 mt-1">08 APR 2026 • Registration open</div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+
+                {/* Status */}
+                <h2 className="font-heading tracking-wide text-2xl md:text-3xl mb-3">
+                  <span className="text-gradient-gold"><AcademyStatus /></span>
+                </h2>
+
+                <p className="text-chess-100/60 text-sm mb-6 flex items-center gap-2">
+                  <i className="fas fa-location-dot text-chess-700"></i>
+                  Near Fashion Bee, Thirunagar, Kilinochchi
+                </p>
+
+                {/* Action Buttons */}
+                <div className="grid grid-cols-2 gap-3 mb-6">
                   <a
-                    href="/pdf/magical-knight-classic-chess-tournament-2026.pdf"
+                    href="https://maps.app.goo.gl/x7ZbwF4F1dKrmtM37"
                     target="_blank"
-                    className="bg-chess-accent text-gray-900 font-semibold px-5 py-3 rounded-xl hover:bg-chess-accentHover transition-colors duration-300 inline-flex items-center justify-center gap-2"
+                    rel="noopener noreferrer"
+                    className="glass-card border border-chess-700/50 text-chess-100 text-sm font-semibold px-4 py-3 rounded-xl hover:bg-white/[0.08] hover:border-chess-blue/30 transition-all duration-300 inline-flex items-center justify-center gap-2"
                   >
-                    <i className="fas fa-file-pdf"></i>
-                    PDF
+                    <i className="fas fa-map text-chess-blue"></i>
+                    Google Maps
                   </a>
-                  <Link
-                    href="/tournaments#current-tournament"
-                    className="glass-card border border-chess-700/50 text-chess-100 font-semibold px-5 py-3 rounded-xl hover:bg-white/5 transition-colors duration-300 inline-flex items-center justify-center gap-2"
+                  <a
+                    href="#coach"
+                    className="glass-card border border-chess-700/50 text-chess-100 text-sm font-semibold px-4 py-3 rounded-xl hover:bg-white/[0.08] hover:border-chess-blue/30 transition-all duration-300 inline-flex items-center justify-center gap-2"
                   >
-                    <i className="fas fa-arrow-right"></i>
-                    Details
-                  </Link>
+                    <i className="fas fa-users text-chess-blue"></i>
+                    Our Coaches
+                  </a>
+                </div>
+
+                {/* Divider */}
+                <div className="h-px bg-gradient-to-r from-transparent via-chess-700/50 to-transparent mb-6" />
+
+                {/* Next Tournament Highlight */}
+                <div className="bg-chess-800/30 rounded-2xl p-5 border border-white/[0.06] relative overflow-hidden">
+                  {/* Subtle gradient accent */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-chess-accent/10 to-transparent rounded-bl-full pointer-events-none" />
+
+                  <div className="flex items-center justify-between mb-3 relative">
+                    <div className="inline-flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-lg bg-chess-accent/15 flex items-center justify-center">
+                        <i className="fas fa-trophy text-chess-accent text-sm"></i>
+                      </div>
+                      <span className="font-semibold text-chess-100 text-sm">Next Highlight</span>
+                    </div>
+                    <span className="text-[10px] font-bold tracking-widest uppercase text-chess-accent/70 glass-card border border-chess-accent/10 px-2.5 py-1 rounded-full">
+                      2026
+                    </span>
+                  </div>
+
+                  <div className="font-heading tracking-wide text-xl font-bold text-chess-accent relative">
+                    Magical Knight Classic
+                  </div>
+                  <div className="text-xs text-chess-100/50 mt-1.5 relative">
+                    <i className="far fa-calendar mr-1"></i>
+                    08 APR 2026 &bull; Registration open
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2.5 mt-4 relative">
+                    <a
+                      href="/pdf/magical-knight-classic-chess-tournament-2026.pdf"
+                      target="_blank"
+                      className="bg-chess-accent/90 text-gray-950 text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-chess-accentHover transition-all duration-300 inline-flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <i className="fas fa-file-pdf"></i>
+                      PDF
+                    </a>
+                    <Link
+                      href="/tournaments#current-tournament"
+                      className="glass-card border border-chess-700/50 text-chess-100 text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-white/[0.08] transition-all duration-300 inline-flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <i className="fas fa-arrow-right text-chess-accent"></i>
+                      Details
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 flex justify-center">
+        {/* Scroll Indicator */}
+        <div className="hero-scroll mt-8 md:mt-12 flex justify-center">
           <a
             href="#about"
-            className="inline-flex items-center justify-center w-12 h-12 rounded-full glass-card border border-chess-700/50 text-chess-accent hover:text-chess-accentHover transition-colors duration-300"
+            className="scroll-indicator group inline-flex flex-col items-center gap-2 text-chess-100/30 hover:text-chess-accent transition-colors duration-300"
             aria-label="Scroll to About"
           >
-            <i className="fas fa-chevron-down"></i>
+            <span className="text-[10px] uppercase tracking-[0.25em] font-medium">Scroll</span>
+            <div className="w-10 h-10 rounded-full glass-card border border-chess-700/30 flex items-center justify-center group-hover:border-chess-accent/40 transition-colors duration-300">
+              <i className="fas fa-chevron-down text-xs"></i>
+            </div>
           </a>
         </div>
       </section>
@@ -224,7 +344,7 @@ export default function Home() {
             Meet Our Coaches
           </h2>
           <div className="flex flex-wrap justify-center gap-8 md:gap-12">
-            {coaches.map((coach) => (
+            {(coachesData as unknown as { name: string; photo: string; title: string; rating?: string; email: string; phone: string; external?: boolean }[]).map((coach) => (
               <CoachCard key={coach.name} coach={coach} />
             ))}
           </div>

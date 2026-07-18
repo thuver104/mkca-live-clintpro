@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { AmbientBackground } from "@/components/AmbientBackground";
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/Footer";
-import { ImageModalProvider } from "@/components/ImageModalProvider";
+import { PublicShell } from "@/components/PublicShell";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,11 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       </head>
       <body className="bg-chess-950 text-chess-100 font-sans antialiased overflow-x-hidden selection:bg-chess-accent selection:text-chess-950">
         <AmbientBackground />
-        <ImageModalProvider>
-          <Nav />
-          {children}
-          <Footer />
-        </ImageModalProvider>
+        <PublicShell>{children}</PublicShell>
       </body>
     </html>
   );
