@@ -109,7 +109,7 @@ export function Nav() {
       </div>
 
       <div
-        className={`fixed inset-0 z-40 bg-chess-950/95 backdrop-blur-3xl transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col items-center justify-center ${
+        className={`fixed inset-0 z-40 bg-chess-950 backdrop-blur-3xl transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] flex flex-col items-center justify-center ${
           open ? "mobile-menu-open" : "mobile-menu-closed"
         }`}
       >
