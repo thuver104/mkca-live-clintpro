@@ -1,8 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getDb } from "@/lib/mongodb";
 
+const FORM_SLUG = "mullai-chess-championship-2026-registration";
+
+export async function GET() {
+  try {
+    const db = await getDb();
+    const form = await db.collection("forms").findOne({ slug: FORM_SLUG });
+    return NextResponse.json({ active: form?.active !== false });
+  } catch (e) {
+    return NextResponse.json({ error: String(e) }, { status: 500 });
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
+    const db = await getDb();
+    const form = await db.collection("forms").findOne({ slug: FORM_SLUG });
+    if (form?.active === false) {
+      return NextResponse.json({ error: "Registration for this tournament is currently closed." }, { status: 403 });
+    }
+
     const body = await req.json();
     const {
       first_name, last_name, dob, gender, phone, email,
@@ -13,9 +31,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Please fill in all required fields and upload your payment slip." }, { status: 400 });
     }
 
-    const db = await getDb();
     const doc = {
-      formId: "mullai-chess-championship-2026-registration",
+      formId: FORM_SLUG,
       formTitle: "Mullai Chess Championship 2026 Registration",
       tournamentTitle: "Mullai Chess Championship 2026",
       data: {

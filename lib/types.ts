@@ -28,6 +28,7 @@ export interface Tournament {
   registrationFormId?: string;
   ageCategories: string[];
   prizes: string;
+  logo: string;
   pdfUrl: string;
   whatsappLink: string;
   registrationLink: string;

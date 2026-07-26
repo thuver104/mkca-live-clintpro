@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Countdown } from "@/components/Countdown";
 import { QuoteCard } from "@/components/QuoteCard";
@@ -32,6 +33,7 @@ interface TournamentDoc {
   registrationFormId?: string;
   ageCategories: string[];
   prizes: string;
+  logo?: string;
   pdfUrl: string;
   whatsappLink: string;
   registrationLink: string;
@@ -83,7 +85,17 @@ export default async function TournamentsPage() {
 
             <div className="glass-card backdrop-blur-2xl border border-chess-700/50 rounded-[2rem] p-8 md:p-12 transition-transform hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(212,175,55,0.2)]">
               <div className="text-center mb-8">
-                <div className="text-5xl mb-4">🏆</div>
+                {featured.logo ? (
+                  <Image
+                    src={featured.logo}
+                    alt={`${featured.title} Logo`}
+                    width={120}
+                    height={120}
+                    className="w-24 h-24 mx-auto mb-4 object-contain"
+                  />
+                ) : (
+                  <div className="text-5xl mb-4">🏆</div>
+                )}
                 <h3 className="font-heading tracking-wide text-3xl md:text-4xl font-bold text-chess-accent mb-2">
                   {featured.title}
                 </h3>
@@ -233,7 +245,12 @@ function UpcomingCard({ tournament: t }: { tournament: TournamentDoc }) {
   return (
     <div className="glass-card backdrop-blur-xl border border-chess-700/50 rounded-2xl p-6 transition-all hover:-translate-y-1 hover:border-chess-accent/30">
       <div className="flex items-start justify-between mb-3">
-        <h3 className="font-heading text-xl font-bold text-chess-accent leading-tight">{t.title}</h3>
+        <div className="flex items-center gap-3">
+          {t.logo && (
+            <Image src={t.logo} alt={`${t.title} Logo`} width={40} height={40} className="w-10 h-10 object-contain shrink-0" />
+          )}
+          <h3 className="font-heading text-xl font-bold text-chess-accent leading-tight">{t.title}</h3>
+        </div>
         <span className="shrink-0 ml-3 text-[10px] font-bold uppercase tracking-wider bg-chess-blue/20 text-chess-blue border border-chess-blue/20 px-2.5 py-1 rounded-full">
           {t.status}
         </span>

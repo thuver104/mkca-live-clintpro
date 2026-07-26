@@ -13,12 +13,14 @@ export default function EditFormPage({ params }: { params: Promise<{ id: string 
   const [fields, setFields] = useState<Field[]>([]);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isCustom, setIsCustom] = useState(false);
 
   useEffect(() => {
     fetch(`/api/forms/${id}`).then((r) => r.json()).then((d) => {
       setTitle(d.title || "");
       setTournamentTitle(d.tournamentTitle || "");
       setFields((d.fields || []).map((f: Field) => ({ ...f, options: f.options || [] })));
+      setIsCustom(Boolean(d.custom));
       setLoading(false);
     });
   }, [id]);
@@ -54,6 +56,13 @@ export default function EditFormPage({ params }: { params: Promise<{ id: string 
   return (
     <div className="max-w-2xl">
       <h1 className="font-heading text-3xl font-bold text-chess-100 mb-8">Edit Form</h1>
+      {isCustom && (
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl px-4 py-3 text-yellow-400 text-sm mb-6">
+          <i className="fas fa-triangle-exclamation mr-2"></i>
+          This registration uses a custom-built page, not the generic field builder. Title and the Active toggle
+          (from the Forms list) control it — adding, editing, or removing fields below has no effect on the live form.
+        </div>
+      )}
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
           <label className="block text-sm font-medium text-chess-100/70 mb-1.5">Form Title</label>

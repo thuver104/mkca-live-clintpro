@@ -74,7 +74,7 @@ export default async function Home() {
     getTournaments(),
     getLatestBlogs(),
   ]);
-  const typed = tournamentsData as unknown as { featured?: boolean; status?: string; title?: string; date?: string; registrationFormId?: string; registrationLink?: string; pdfUrl?: string; _id?: string; registrationOpen?: boolean }[];
+  const typed = tournamentsData as unknown as { featured?: boolean; status?: string; title?: string; date?: string; registrationFormId?: string; registrationLink?: string; pdfUrl?: string; logo?: string; _id?: string; registrationOpen?: boolean }[];
   const featuredTournament = typed.find((t) => t.featured && t.status !== "completed") || typed.find((t) => t.status === "upcoming");
   const statsCount = { students: playersData.length, coaches: coachesData.length, tournaments: tournamentsData.length };
   const heroRegister = featuredTournament?.registrationOpen
@@ -287,8 +287,12 @@ export default async function Home() {
 
                   <div className="flex items-center justify-between mb-3 relative">
                     <div className="inline-flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-chess-accent/15 flex items-center justify-center">
-                        <i className="fas fa-trophy text-chess-accent text-sm"></i>
+                      <div className="w-8 h-8 rounded-lg bg-chess-accent/15 flex items-center justify-center overflow-hidden">
+                        {featuredTournament?.logo ? (
+                          <Image src={featuredTournament.logo} alt="Tournament Logo" width={32} height={32} className="w-full h-full object-contain" />
+                        ) : (
+                          <i className="fas fa-trophy text-chess-accent text-sm"></i>
+                        )}
                       </div>
                       <span className="font-semibold text-chess-100 text-sm">Next Highlight</span>
                     </div>

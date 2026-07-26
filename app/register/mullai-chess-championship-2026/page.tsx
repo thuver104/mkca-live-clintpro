@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 const AGE_CATEGORIES = [
@@ -28,6 +28,14 @@ export default function MullaiChessChampionship2026RegisterPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [active, setActive] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    fetch("/api/tournaments/mullai-2026/register")
+      .then((r) => r.json())
+      .then((d) => setActive(d.active !== false))
+      .catch(() => setActive(true));
+  }, []);
 
   const set = (k: string, v: string) => setForm((p) => ({ ...p, [k]: v }));
 
@@ -73,6 +81,29 @@ export default function MullaiChessChampionship2026RegisterPage() {
     }
     setSubmitting(false);
   };
+
+  if (active === null) {
+    return (
+      <div className="min-h-screen bg-chess-950 flex items-center justify-center">
+        <div className="text-chess-accent animate-pulse font-heading text-xl">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!active) {
+    return (
+      <div className="min-h-screen bg-chess-950 flex items-center justify-center px-4">
+        <div className="text-center">
+          <i className="fas fa-clock text-5xl text-chess-100/30 mb-4"></i>
+          <h1 className="font-heading text-3xl font-bold text-chess-100 mb-4">Registration Closed</h1>
+          <p className="text-chess-100/60 mb-6">Registration for Mullai Chess Championship 2026 is currently closed.</p>
+          <Link href="/tournaments" className="bg-chess-accent text-gray-950 font-bold px-6 py-3 rounded-xl hover:bg-chess-accentHover transition-colors text-sm inline-flex items-center gap-2">
+            <i className="fas fa-arrow-left"></i>Back to Tournaments
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (submitted) {
     return (

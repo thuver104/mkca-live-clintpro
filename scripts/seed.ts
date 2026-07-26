@@ -61,6 +61,7 @@ async function seed() {
         "Parents Event",
       ],
       prizes: "Champion, 1st & 2nd Runner-up: Trophy + Medal + Certificate. 4th & 5th Place: Trophy + Medal + Certificate. 6th-15th Place: Medal + Certificate. Certificates for all participants.",
+      logo: "/images/MCC26.png",
       pdfUrl: "/pdf/mullai-chess-championship-2026.pdf",
       whatsappLink: "",
       registrationLink: "/register/mullai-chess-championship-2026",
@@ -80,6 +81,7 @@ async function seed() {
       registrationOpen: false,
       ageCategories: ["Under 6", "Under 8", "Under 10", "Under 12", "Under 14", "Above 14"],
       prizes: "195 winners across all categories",
+      logo: "",
       pdfUrl: "/pdf/magical-knight-classic-chess-tournament-2026.pdf",
       whatsappLink: "https://chat.whatsapp.com/FDmyZ3aIyO6JkM67TVJZ6t?mode=gi_t",
       registrationLink: "https://docs.google.com/forms/d/e/1FAIpQLSfVslF3X-SlvlaXh2MDXf9yGmlXu-yPIR23mtNhusEAguwq5Q/viewform?usp=header",
@@ -99,6 +101,7 @@ async function seed() {
       registrationOpen: false,
       ageCategories: ["Under 6", "Under 8", "Under 10", "Under 12", "Under 14", "Over 14"],
       prizes: "180 Total Prizes",
+      logo: "",
       pdfUrl: "/pdf/Mullai_Chess_Championship_2025_Updated.pdf",
       whatsappLink: "",
       registrationLink: "",
@@ -118,6 +121,7 @@ async function seed() {
       registrationOpen: false,
       ageCategories: [],
       prizes: "",
+      logo: "",
       pdfUrl: "",
       whatsappLink: "",
       registrationLink: "",
@@ -232,6 +236,28 @@ async function seed() {
   ];
   await db.collection("blogs").insertMany(blogs);
   console.log(`Seeded ${blogs.length} blogs`);
+
+  // Seed Forms
+  // Note: "Mullai Chess Championship 2026 Registration" is a custom-built page
+  // (app/register/mullai-chess-championship-2026) with file upload + consent fields
+  // not supported by the generic field builder. This record only tracks its
+  // title/active state for the admin Forms list and submissions filter — the
+  // `fields` array below has no effect on the live registration page.
+  const forms = [
+    {
+      title: "Mullai Chess Championship 2026 Registration",
+      slug: "mullai-chess-championship-2026-registration",
+      tournamentId: "",
+      tournamentTitle: "Mullai Chess Championship 2026",
+      fields: [],
+      custom: true,
+      active: true,
+      createdAt: now,
+      updatedAt: now,
+    },
+  ];
+  await db.collection("forms").insertMany(forms);
+  console.log(`Seeded ${forms.length} forms`);
 
   console.log("\nSeed complete!");
   await client.close();

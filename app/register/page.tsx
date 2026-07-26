@@ -1,12 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 interface Field { id: string; label: string; type: string; required: boolean; options: string[]; placeholder: string; }
 interface FormData { _id: string; title: string; tournamentTitle: string; fields: Field[]; active: boolean; }
 
 export default function RegisterPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-chess-950 flex items-center justify-center">
+        <div className="text-chess-accent animate-pulse font-heading text-xl">Loading...</div>
+      </div>
+    }>
+      <RegisterForm />
+    </Suspense>
+  );
+}
+
+function RegisterForm() {
   const searchParams = useSearchParams();
   const formId = searchParams.get("form");
   const [form, setForm] = useState<FormData | null>(null);

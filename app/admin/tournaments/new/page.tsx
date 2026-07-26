@@ -1,18 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function NewTournamentPage() {
   const router = useRouter();
+  const fileRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     title: "", description: "", date: "", time: "", venue: "", entryFee: "",
     status: "upcoming", featured: false, registrationOpen: true,
     registrationFormId: "",
-    ageCategories: "", prizes: "", pdfUrl: "", whatsappLink: "", registrationLink: "", venueMapLink: "",
+    ageCategories: "", prizes: "", logo: "", pdfUrl: "", whatsappLink: "", registrationLink: "", venueMapLink: "",
   });
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const set = (k: string, v: string | boolean) => setForm((p) => ({ ...p, [k]: v }));
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const fd = new FormData();
+    fd.append("file", file);
+    const res = await fetch("/api/upload", { method: "POST", body: fd });
+    const data = await res.json();
+    if (data.url) set("logo", data.url);
+    setUploading(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +60,22 @@ export default function NewTournamentPage() {
         {input("Venue", "venue", "text", true)}
         {input("Entry Fee", "entryFee")}
         <div>
+          <label className="block text-sm font-medium text-chess-100/70 mb-1.5">Logo</label>
+          <div className="flex items-center gap-3">
+            <input type="file" ref={fileRef} onChange={handleLogoUpload} accept="image/*" className="hidden" />
+            <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
+              className="glass-card border border-chess-700/50 text-chess-100 text-sm px-4 py-2.5 rounded-xl hover:bg-white/5 transition-colors disabled:opacity-50">
+              <i className="fas fa-upload mr-2"></i>{uploading ? "Uploading..." : "Upload Logo"}
+            </button>
+            {form.logo && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={form.logo} alt="Preview" className="w-12 h-12 rounded-xl object-contain bg-chess-800/60 border border-chess-700/50" />
+            )}
+          </div>
+          <input type="text" value={form.logo} onChange={(e) => set("logo", e.target.value)} placeholder="Or enter image URL"
+            className="w-full mt-2 bg-chess-800/60 border border-chess-700/50 rounded-xl px-4 py-3 text-chess-100 placeholder-chess-100/30 focus:outline-none focus:border-chess-accent/50 text-sm" />
+        </div>
+        <div>
           <label className="block text-sm font-medium text-chess-100/70 mb-1.5">Status</label>
           <select value={form.status} onChange={(e) => set("status", e.target.value)} className="w-full bg-chess-800/60 border border-chess-700/50 rounded-xl px-4 py-3 text-chess-100 focus:outline-none focus:border-chess-accent/50 text-sm">
             {["upcoming", "ongoing", "completed"].map((s) => <option key={s} value={s}>{s}</option>)}
@@ -59,6 +89,14 @@ export default function NewTournamentPage() {
         {input("PDF URL", "pdfUrl")}
         {input("WhatsApp Link", "whatsappLink")}
         {input("Registration Form ID (from Forms section)", "registrationFormId")}
+        <div>
+          {input("External Registration Link (Google Form, etc.)", "registrationLink")}
+          <p className="text-chess-100/40 text-xs mt-1.5">
+            Optional. If set, the public &quot;Register Now&quot; button uses this instead of the Registration Form ID above &mdash;
+            paste a full external URL (e.g. a Google Form) to open it in a new tab, or an internal path
+            like <span className="font-mono">/register/my-page</span> to link within the site.
+          </p>
+        </div>
         {input("Venue Map Link", "venueMapLink")}
         <div className="flex gap-6">
           <label className="flex items-center gap-3 cursor-pointer">
