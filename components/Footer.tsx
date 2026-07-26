@@ -56,19 +56,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-16 pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-center gap-4">
           <p className="text-slate-500 text-sm">© 2026 MKCA. All rights reserved.</p>
-          <p className="text-slate-500 text-sm flex items-center gap-1">
-            Crafted with <i className="fas fa-heart text-red-500 animate-pulse"></i> by
-            <a
-              href="https://www.senzura.tech/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-300 hover:text-white hover:underline underline-offset-4 ml-1"
-            >
-              Senzura codeLabs
-            </a>
-          </p>
         </div>
       </div>
     </footer>

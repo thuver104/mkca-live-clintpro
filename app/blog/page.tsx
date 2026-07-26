@@ -1,15 +1,25 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { MediaModalProvider } from "@/components/MediaModalProvider";
-import { FeaturedTournamentTabs } from "@/components/blog/FeaturedTournamentTabs";
-import { EventSpotlightMedia } from "@/components/blog/EventSpotlightMedia";
 import { getDb } from "@/lib/mongodb";
+
+interface Blog {
+  _id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt?: string;
+  category?: string;
+  image?: string;
+  author?: string;
+  createdAt?: string;
+}
 
 async function getBlogs() {
   try {
     const db = await getDb();
-    return await db.collection("blogs").find({ published: true }).sort({ createdAt: -1 }).toArray();
+    const blogs = await db.collection("blogs").find({ published: true }).sort({ createdAt: -1 }).toArray();
+    return blogs as unknown as Blog[];
   } catch {
     return [];
   }
@@ -49,93 +59,15 @@ export default async function BlogPage() {
         </p>
 
         <a
-          href="#featured"
+          href="#content"
           className="w-14 h-20 rounded-full border-2 border-slate-700 flex justify-center p-2 hover:border-chess-accent transition-colors duration-300 group animate-fade-in-up"
         >
           <div className="w-1.5 h-4 bg-slate-500 group-hover:bg-chess-accent rounded-full animate-float"></div>
         </a>
       </header>
 
-      {/* Featured Tournament (Magical Knight Classic 2026) */}
-      <main id="featured" className="max-w-7xl mx-auto px-4 z-10 relative mb-32 scroll-mt-24">
-        <div className="glass-card rounded-[2.5rem] md:rounded-[3rem] p-1 shadow-2xl relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-br from-chess-accent/10 to-chess-blue/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-
-          <div className="bg-chess-900/60 rounded-[2.4rem] md:rounded-[2.9rem] p-6 sm:p-10 lg:p-16 flex flex-col lg:flex-row gap-12 lg:gap-16">
-            {/* Left: Poster / TL;DR Side */}
-            <div className="lg:w-5/12 flex flex-col justify-center">
-              <div className="mb-8">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold tracking-widest uppercase mb-6 animate-pulse-slow">
-                  <span className="w-2 h-2 rounded-full bg-red-500"></span> Upcoming Event
-                </div>
-                <Image
-                  src="/images/mkc26-logo.png"
-                  alt="Magical Knight Classic 2026 Logo"
-                  width={150}
-                  height={150}
-                  className="w-[120px] lg:w-[150px] mb-6 object-contain"
-                />
-                <h2 className="font-heading text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.05] tracking-tight mb-4">
-                  Magical Knight <br />
-                  <span className="text-gradient-gold">Classic 2026</span>
-                </h2>
-                <p className="text-slate-400 text-lg sm:text-xl font-light">
-                  Exclusive Provincial Super-Tournament for Northern Province Players.
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-5 mb-10">
-                <div className="flex items-center gap-4 bg-white/5 rounded-2xl p-4 border border-white/5">
-                  <div className="w-12 h-12 rounded-xl bg-chess-accent/20 flex items-center justify-center text-chess-accent text-xl shrink-0">
-                    <i className="fas fa-calendar-alt"></i>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-0.5">Date & Time</p>
-                    <p className="text-white font-semibold">08 APR 2026, 8:30 AM</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 bg-white/5 rounded-2xl p-4 border border-white/5">
-                  <div className="w-12 h-12 rounded-xl bg-chess-blue/20 flex items-center justify-center text-chess-blue text-xl shrink-0">
-                    <i className="fas fa-map-pin"></i>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-0.5">Location</p>
-                    <p className="text-white font-semibold">Kilinochchi Maha Vidyalayam</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 bg-white/5 rounded-2xl p-4 border border-white/5">
-                  <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-400 text-xl shrink-0">
-                    <i className="fas fa-trophy"></i>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold mb-0.5">Categories</p>
-                    <p className="text-white font-medium text-sm">
-                      Under 6, 8, 10, 12, 14 & Above 14 (Boys/Girls) + Parents
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <a
-                href="/pdf/magical-knight-classic-chess-tournament-2026.pdf"
-                target="_blank"
-                className="group flex items-center justify-center gap-3 bg-chess-accent hover:bg-chess-accentHover text-chess-950 font-bold py-4 px-8 rounded-2xl transition-all duration-300 hover:shadow-[0_10px_30px_rgba(245,158,11,0.3)] hover:-translate-y-1 w-full text-lg"
-              >
-                <i className="fas fa-file-download text-xl group-hover:animate-bounce"></i>
-                Download Full PDF
-              </a>
-            </div>
-
-            {/* Right: Details Tabs */}
-            <div className="lg:w-7/12 flex flex-col">
-              <FeaturedTournamentTabs />
-            </div>
-          </div>
-        </div>
-      </main>
-
       {/* Categories / Bento Box Layout */}
-      <section className="max-w-7xl mx-auto px-4 mb-32 z-10 relative">
+      <section id="content" className="max-w-7xl mx-auto px-4 mb-32 z-10 relative scroll-mt-24">
         <div className="text-center mb-16">
           <h2 className="font-heading text-3xl md:text-5xl font-bold mb-4">
             Explore More <span className="text-gradient-blue">Content</span>
@@ -162,62 +94,46 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      {/* Past Event Spotlight: MCC 2025 */}
-      <MediaModalProvider>
-        <section className="max-w-7xl mx-auto px-4 mb-32 z-10 relative">
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="font-heading text-3xl md:text-5xl font-bold text-white">
-              Event <span className="text-slate-500">Spotlight</span>
+      {/* Latest Posts (past tournaments & announcements, fully data-driven) */}
+      {blogsData.length > 0 && (
+        <section id="blogs" className="max-w-7xl mx-auto px-4 mb-32 z-10 relative scroll-mt-24">
+          <div className="text-center mb-16">
+            <h2 className="font-heading text-3xl md:text-5xl font-bold mb-4">
+              Latest <span className="text-gradient-gold">Posts</span>
             </h2>
-            <div className="bg-white/5 border border-white/10 px-4 py-2 rounded-full text-xs font-semibold tracking-wider text-slate-300">
-              COMPLETED EVENT
-            </div>
+            <p className="text-slate-400 max-w-2xl mx-auto">
+              News, tournament recaps, and stories from the academy.
+            </p>
           </div>
 
-          <div className="glass-card rounded-[2.5rem] overflow-hidden group border-slate-700/50">
-            <div className="grid lg:grid-cols-2">
-              <div className="relative overflow-hidden min-h-[400px] lg:min-h-full">
-                <Image
-                  src="/blog/mcc25/mcc25.webp"
-                  alt="Mullai Chess Championship"
-                  fill
-                  className="object-cover transform group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-chess-950 via-chess-950/40 to-transparent lg:bg-gradient-to-r"></div>
-              </div>
-
-              <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center relative bg-chess-900/40">
-                <p className="text-sm font-semibold tracking-widest text-chess-accent uppercase mb-3">
-                  Historical Milestone
-                </p>
-                <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
-                  முல்லை CHESS <br />
-                  சாம்பியன்ஷிப் 2025
-                </h3>
-                <p className="text-slate-300 text-lg mb-8 leading-relaxed">
-                  முல்லைத்தீவு மாவட்டத்தின் சதுரங்க வரலாற்றில் புதிய பொற்காலத்தை உருவாக்கிய ஒரு பெரும் நிகழ்வாக,{" "}
-                  <strong className="text-white">Magical Knight Chess Academy (MKCA)</strong> பெருமையுடன் நடத்திய
-                  முல்லை CHESS சாம்பியன்ஷிப் 2025 மிகுந்த சிறப்புடனும் வெற்றிகரமாகவும் நிறைவடைந்துள்ளது. இது மாவட்ட
-                  சதுரங்க வளர்ச்சிக்கு ஒரு மைல்கல்!
-                </p>
-
-                <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="bg-chess-950/60 rounded-2xl p-5 border border-slate-700/50">
-                    <div className="text-3xl font-heading font-black text-white mb-1">350+</div>
-                    <div className="text-sm text-slate-400">திறமையான வீரர்கள் களம் கண்டனர்</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {blogsData.map((blog) => (
+              <article key={blog._id} className="glass-card rounded-3xl overflow-hidden border-slate-700/50 flex flex-col">
+                {blog.image && (
+                  <div className="relative w-full h-56">
+                    <Image src={blog.image} alt={blog.title} fill className="object-cover" />
                   </div>
-                  <div className="bg-chess-950/60 rounded-2xl p-5 border border-slate-700/50">
-                    <div className="text-3xl font-heading font-black text-white mb-1">4+</div>
-                    <div className="text-sm text-slate-400">ஊடகங்களில் நேரடி கவரேஜ்</div>
+                )}
+                <div className="p-8 flex flex-col flex-1">
+                  <div className="flex items-center gap-3 mb-4 text-xs text-slate-400 uppercase tracking-widest font-semibold">
+                    {blog.category && <span className="text-chess-accent">{blog.category}</span>}
+                    {blog.author && <span>{blog.author}</span>}
+                    {blog.createdAt && <span>{new Date(blog.createdAt).toLocaleDateString()}</span>}
                   </div>
+                  <h3 className="font-heading text-2xl font-bold text-white mb-4">{blog.title}</h3>
+                  {blog.excerpt && <p className="text-slate-400 mb-6 flex-1">{blog.excerpt}</p>}
+                  <Link
+                    href={`/blog/${blog.slug}`}
+                    className="inline-flex w-max items-center gap-2 text-chess-accent font-semibold hover:text-chess-accentHover transition-colors"
+                  >
+                    Read Full Blog <i className="fas fa-arrow-right text-sm"></i>
+                  </Link>
                 </div>
-
-                <EventSpotlightMedia />
-              </div>
-            </div>
+              </article>
+            ))}
           </div>
         </section>
-      </MediaModalProvider>
+      )}
 
       {/* Quote Section */}
       <section className="max-w-4xl mx-auto px-4 text-center mb-32 z-10 relative">

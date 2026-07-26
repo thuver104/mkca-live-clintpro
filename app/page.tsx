@@ -1,11 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 import { AcademyStatus } from "@/components/AcademyStatus";
 import { CoachCard } from "@/components/CoachCard";
-import { GalleryCard } from "@/components/GalleryCard";
 import { QuoteCard } from "@/components/QuoteCard";
 import { StatGrid } from "@/components/StatGrid";
 import { getDb } from "@/lib/mongodb";
-import { achievementGallery } from "@/lib/data/achievements";
+
+interface Blog {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  category?: string;
+  image?: string;
+}
 
 async function getCoaches() {
   try {
@@ -34,6 +42,16 @@ async function getTournaments() {
   }
 }
 
+async function getLatestBlogs() {
+  try {
+    const db = await getDb();
+    const blogs = await db.collection("blogs").find({ published: true }).sort({ createdAt: -1 }).limit(3).toArray();
+    return blogs as unknown as Blog[];
+  } catch {
+    return [];
+  }
+}
+
 const FEATURES = [
   { icon: "fa-graduation-cap", title: "Expert Instruction", description: "Learn from grandmasters and certified instructors with decades of competitive experience." },
   { icon: "fa-users", title: "Community", description: "Join a vibrant community of chess enthusiasts and forge lifelong friendships." },
@@ -49,23 +67,23 @@ const FACTS = [
   { value: "10^120", label: "Possible chess games" },
 ];
 
-const OPENING_CEREMONY_IMAGES = [
-  { src: "/images/gallery/opening-ceremony/IMG-20250608-WA0158.jpg", alt: "Open 1" },
-  { src: "/images/gallery/opening-ceremony/IMG-20250608-WA0161.jpg", alt: "Open 2" },
-  { src: "/images/gallery/opening-ceremony/IMG-20250608-WA0169.jpg", alt: "Open 3" },
-];
-
-const RAPID_TOURNAMENT_IMAGES = [
-  { src: "/images/gallery/rapid-tournament-2025/IMG-20250608-WA0039.jpg", alt: "Match 1" },
-  { src: "/images/gallery/rapid-tournament-2025/IMG-20250608-WA0050.jpg", alt: "Match 2" },
-  { src: "/images/gallery/rapid-tournament-2025/IMG-20250608-WA0109.jpg", alt: "Match 3" },
-];
-
 export default async function Home() {
-  const [coachesData, playersData, tournamentsData] = await Promise.all([getCoaches(), getPlayers(), getTournaments()]);
-  const typed = tournamentsData as unknown as { featured?: boolean; status?: string; title?: string; date?: string; registrationFormId?: string; pdfUrl?: string; _id?: string; registrationOpen?: boolean }[];
+  const [coachesData, playersData, tournamentsData, latestBlogs] = await Promise.all([
+    getCoaches(),
+    getPlayers(),
+    getTournaments(),
+    getLatestBlogs(),
+  ]);
+  const typed = tournamentsData as unknown as { featured?: boolean; status?: string; title?: string; date?: string; registrationFormId?: string; registrationLink?: string; pdfUrl?: string; _id?: string; registrationOpen?: boolean }[];
   const featuredTournament = typed.find((t) => t.featured && t.status !== "completed") || typed.find((t) => t.status === "upcoming");
   const statsCount = { students: playersData.length, coaches: coachesData.length, tournaments: tournamentsData.length };
+  const heroRegister = featuredTournament?.registrationOpen
+    ? featuredTournament.registrationLink
+      ? { href: featuredTournament.registrationLink, external: /^https?:\/\//.test(featuredTournament.registrationLink) }
+      : featuredTournament.registrationFormId
+        ? { href: `/register?form=${featuredTournament.registrationFormId}`, external: false }
+        : null
+    : null;
   return (
     <>
       {/* Hero Section */}
@@ -114,15 +132,28 @@ export default async function Home() {
 
             {/* CTAs */}
             <div className="hero-cta mt-8 flex flex-col sm:flex-row gap-3">
-              {featuredTournament?.registrationOpen && featuredTournament?.registrationFormId ? (
-                <Link
-                  href={`/register?form=${featuredTournament.registrationFormId}`}
-                  className="btn-glow relative bg-gradient-to-r from-chess-accent to-amber-500 text-gray-950 font-bold px-8 py-4 rounded-2xl hover:from-chess-accentHover hover:to-yellow-400 transition-all duration-300 inline-flex items-center justify-center gap-3 text-lg shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  <i className="fas fa-chess-knight text-xl"></i>
-                  Register Now
-                  <i className="fas fa-arrow-right text-sm"></i>
-                </Link>
+              {heroRegister ? (
+                heroRegister.external ? (
+                  <a
+                    href={heroRegister.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-glow relative bg-gradient-to-r from-chess-accent to-amber-500 text-gray-950 font-bold px-8 py-4 rounded-2xl hover:from-chess-accentHover hover:to-yellow-400 transition-all duration-300 inline-flex items-center justify-center gap-3 text-lg shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <i className="fas fa-chess-knight text-xl"></i>
+                    Register Now
+                    <i className="fas fa-arrow-right text-sm"></i>
+                  </a>
+                ) : (
+                  <Link
+                    href={heroRegister.href}
+                    className="btn-glow relative bg-gradient-to-r from-chess-accent to-amber-500 text-gray-950 font-bold px-8 py-4 rounded-2xl hover:from-chess-accentHover hover:to-yellow-400 transition-all duration-300 inline-flex items-center justify-center gap-3 text-lg shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_40px_rgba(245,158,11,0.5)] hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <i className="fas fa-chess-knight text-xl"></i>
+                    Register Now
+                    <i className="fas fa-arrow-right text-sm"></i>
+                  </Link>
+                )
               ) : (
                 <Link
                   href="/tournaments"
@@ -383,46 +414,53 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Events Section */}
-      <section className="relative z-10 py-20 px-4" id="events">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="font-heading tracking-wide text-3xl md:text-4xl font-bold mb-8 text-center text-gradient-gold">
-            Event Highlights
-          </h2>
-          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide py-4 px-2">
-            <GalleryCard
-              title="Opening Ceremony"
-              dateLabel="June 2025"
-              images={OPENING_CEREMONY_IMAGES}
-              className="min-w-[200px] mx-2 snap-center"
-            />
-            <GalleryCard
-              title="Rapid Chess Tournament"
-              dateLabel="June 2025"
-              images={RAPID_TOURNAMENT_IMAGES}
-              className="min-w-[200px] mx-2 snap-center"
-            />
+      {/* Latest From MKCA Section */}
+      {latestBlogs.length > 0 && (
+        <section className="relative z-10 py-20 px-4" id="latest">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between mb-12 flex-wrap gap-4">
+              <h2 className="font-heading tracking-wide text-3xl md:text-4xl font-bold text-gradient-gold">
+                Latest From MKCA
+              </h2>
+              <Link
+                href="/blog"
+                className="glass-card border border-chess-700/50 text-chess-100 font-semibold px-6 py-3 rounded-xl hover:bg-white/[0.08] hover:border-chess-accent/30 transition-all duration-300 inline-flex items-center gap-2"
+              >
+                View All Posts <i className="fas fa-arrow-right text-sm"></i>
+              </Link>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {latestBlogs.map((blog) => (
+                <Link
+                  key={blog._id}
+                  href={`/blog/${blog.slug}`}
+                  className="glass-card rounded-3xl overflow-hidden border border-chess-700/50 group hover:-translate-y-2 transition-all duration-500 hover:shadow-[0_15px_40px_rgba(212,175,55,0.15)]"
+                >
+                  {blog.image && (
+                    <div className="relative w-full h-48">
+                      <Image
+                        src={blog.image}
+                        alt={blog.title}
+                        fill
+                        className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    {blog.category && (
+                      <span className="text-xs font-semibold tracking-widest uppercase text-chess-accent">
+                        {blog.category}
+                      </span>
+                    )}
+                    <h3 className="font-heading text-xl font-bold text-chess-100 mt-2 mb-2">{blog.title}</h3>
+                    {blog.excerpt && <p className="text-chess-100/60 text-sm leading-relaxed">{blog.excerpt}</p>}
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Achievement Section */}
-      <section className="relative z-10 py-20 px-4" id="achievements">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="font-heading tracking-wide text-3xl md:text-4xl font-bold mb-8 text-center text-gradient-gold">
-            Achievements
-          </h2>
-          <div className="flex justify-center">
-            <GalleryCard
-              title={achievementGallery.title}
-              subtitle={achievementGallery.subtitle}
-              dateLabel={achievementGallery.dateLabel}
-              images={achievementGallery.images}
-              className="w-full max-w-md"
-            />
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Chess Facts Section */}
       <section className="relative z-10 py-20 px-4">

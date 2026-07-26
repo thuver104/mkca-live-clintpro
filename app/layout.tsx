@@ -31,7 +31,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
       </head>
-      <body className="bg-chess-950 text-chess-100 font-sans antialiased overflow-x-hidden selection:bg-chess-accent selection:text-chess-950">
+      <body
+        className="bg-chess-950 text-chess-100 font-sans antialiased overflow-x-hidden selection:bg-chess-accent selection:text-chess-950"
+        suppressHydrationWarning
+      >
         <AmbientBackground />
         <PublicShell>{children}</PublicShell>
       </body>

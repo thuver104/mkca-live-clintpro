@@ -38,12 +38,23 @@ interface TournamentDoc {
   venueMapLink: string;
 }
 
+function registerLinkFor(t: { registrationLink?: string; registrationFormId?: string }) {
+  if (t.registrationLink) {
+    return { href: t.registrationLink, external: /^https?:\/\//.test(t.registrationLink) };
+  }
+  if (t.registrationFormId) {
+    return { href: `/register?form=${t.registrationFormId}`, external: false };
+  }
+  return null;
+}
+
 export default async function TournamentsPage() {
   const tournamentsData = await getTournaments();
   const typed = tournamentsData as unknown as TournamentDoc[];
   const featured = typed.find((t) => t.featured && t.status !== "completed");
   const upcoming = typed.filter((t) => t.status === "upcoming" && !t.featured);
   const completed = typed.filter((t) => t.status === "completed");
+  const featuredRegister = featured?.registrationOpen ? registerLinkFor(featured) : null;
 
   return (
     <>
@@ -127,13 +138,24 @@ export default async function TournamentsPage() {
               )}
 
               <div className="flex flex-wrap justify-center gap-3">
-                {featured.registrationOpen && featured.registrationFormId && (
-                  <Link
-                    href={`/register?form=${featured.registrationFormId}`}
-                    className="bg-chess-accent text-gray-950 font-bold px-6 py-3 rounded-xl hover:bg-chess-accentHover transition-colors text-sm inline-flex items-center gap-2"
-                  >
-                    <i className="fas fa-file-signature"></i>Register Now
-                  </Link>
+                {featuredRegister && (
+                  featuredRegister.external ? (
+                    <a
+                      href={featuredRegister.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-chess-accent text-gray-950 font-bold px-6 py-3 rounded-xl hover:bg-chess-accentHover transition-colors text-sm inline-flex items-center gap-2"
+                    >
+                      <i className="fas fa-file-signature"></i>Register Now
+                    </a>
+                  ) : (
+                    <Link
+                      href={featuredRegister.href}
+                      className="bg-chess-accent text-gray-950 font-bold px-6 py-3 rounded-xl hover:bg-chess-accentHover transition-colors text-sm inline-flex items-center gap-2"
+                    >
+                      <i className="fas fa-file-signature"></i>Register Now
+                    </Link>
+                  )
                 )}
                 {featured.whatsappLink && (
                   <a href={featured.whatsappLink} target="_blank" rel="noopener noreferrer"
@@ -207,6 +229,7 @@ function InfoCard({ icon, label, value }: { icon: string; label: string; value: 
 }
 
 function UpcomingCard({ tournament: t }: { tournament: TournamentDoc }) {
+  const register = t.registrationOpen ? registerLinkFor(t) : null;
   return (
     <div className="glass-card backdrop-blur-xl border border-chess-700/50 rounded-2xl p-6 transition-all hover:-translate-y-1 hover:border-chess-accent/30">
       <div className="flex items-start justify-between mb-3">
@@ -233,11 +256,18 @@ function UpcomingCard({ tournament: t }: { tournament: TournamentDoc }) {
         )}
       </div>
       <div className="flex flex-wrap gap-2">
-        {t.registrationOpen && t.registrationFormId && (
-          <Link href={`/register?form=${t.registrationFormId}`}
-            className="bg-chess-accent text-gray-950 font-bold px-4 py-2 rounded-lg text-xs hover:bg-chess-accentHover transition-colors">
-            <i className="fas fa-pen mr-1"></i>Register
-          </Link>
+        {register && (
+          register.external ? (
+            <a href={register.href} target="_blank" rel="noopener noreferrer"
+              className="bg-chess-accent text-gray-950 font-bold px-4 py-2 rounded-lg text-xs hover:bg-chess-accentHover transition-colors">
+              <i className="fas fa-pen mr-1"></i>Register
+            </a>
+          ) : (
+            <Link href={register.href}
+              className="bg-chess-accent text-gray-950 font-bold px-4 py-2 rounded-lg text-xs hover:bg-chess-accentHover transition-colors">
+              <i className="fas fa-pen mr-1"></i>Register
+            </Link>
+          )
         )}
         {t.pdfUrl && (
           <a href={t.pdfUrl} target="_blank" rel="noopener noreferrer"
