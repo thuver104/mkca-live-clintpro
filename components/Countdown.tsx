@@ -49,13 +49,13 @@ export function Countdown({
 
   return (
     <div>
-      <div className="grid grid-cols-4 gap-3 md:gap-6 max-w-xl mx-auto">
+      <div className="grid grid-cols-4 gap-2 sm:gap-3 md:gap-6 max-w-xl mx-auto">
         {UNITS.map((unit) => (
-          <div key={unit.key} className="bg-chess-800/60 border border-chess-accent/20 rounded-2xl p-4 text-center">
-            <span className="font-heading text-4xl md:text-5xl font-bold text-chess-accent block leading-none">
+          <div key={unit.key} className="bg-chess-800/60 border border-chess-accent/20 rounded-xl sm:rounded-2xl p-2 sm:p-4 text-center overflow-hidden">
+            <span className="font-heading text-2xl sm:text-4xl md:text-5xl font-bold text-chess-accent block leading-none">
               {String(display[unit.key]).padStart(2, "0")}
             </span>
-            <span className="text-xs text-slate-400 uppercase tracking-widest mt-2 block">{unit.label}</span>
+            <span className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-normal sm:tracking-widest mt-1.5 sm:mt-2 block">{unit.label}</span>
           </div>
         ))}
       </div>
