@@ -61,7 +61,7 @@ async function seed() {
         "Parents Event",
       ],
       prizes: "Champion, 1st & 2nd Runner-up: Trophy + Medal + Certificate. 4th & 5th Place: Trophy + Medal + Certificate. 6th-15th Place: Medal + Certificate. Certificates for all participants.",
-      pdfUrl: "",
+      pdfUrl: "/pdf/mullai-chess-championship-2026.pdf",
       whatsappLink: "",
       registrationLink: "/register/mullai-chess-championship-2026",
       venueMapLink: "",

@@ -183,7 +183,7 @@ export default async function Home() {
             {/* Stats Strip */}
             <div className="hero-stats mt-10 flex items-center gap-0">
               <div className="flex flex-col items-center px-5 md:px-7 first:pl-0">
-                <span className="font-heading text-2xl md:text-3xl font-bold text-chess-accent">{statsCount.students}+</span>
+                <span className="font-heading text-2xl md:text-3xl font-bold text-chess-accent">900+</span>
                 <span className="text-xs md:text-sm text-chess-100/50 mt-0.5">Students</span>
               </div>
               <div className="w-px h-10 bg-chess-700/50"></div>
@@ -198,7 +198,7 @@ export default async function Home() {
               </div>
               <div className="w-px h-10 bg-chess-700/50 hidden sm:block"></div>
               <div className="hidden sm:flex flex-col items-center px-5 md:px-7">
-                <span className="font-heading text-2xl md:text-3xl font-bold text-chess-accent">8</span>
+                <span className="font-heading text-2xl md:text-3xl font-bold text-chess-accent">2</span>
                 <span className="text-xs md:text-sm text-chess-100/50 mt-0.5">Years</span>
               </div>
             </div>
