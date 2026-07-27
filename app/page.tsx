@@ -6,6 +6,8 @@ import { QuoteCard } from "@/components/QuoteCard";
 import { StatGrid } from "@/components/StatGrid";
 import { getDb } from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+
 interface Blog {
   _id: string;
   title: string;

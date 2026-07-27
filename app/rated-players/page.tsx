@@ -11,6 +11,8 @@ import {
 } from "@/lib/data/players";
 import { getDb } from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+
 async function getPlayers() {
   try {
     const db = await getDb();

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDb } from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+
 interface Blog {
   _id: string;
   title: string;

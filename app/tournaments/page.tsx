@@ -5,6 +5,8 @@ import { Countdown } from "@/components/Countdown";
 import { QuoteCard } from "@/components/QuoteCard";
 import { getDb } from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+
 async function getTournaments() {
   try {
     const db = await getDb();

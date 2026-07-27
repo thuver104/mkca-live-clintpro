@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { getDb } from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+
 interface Blog {
   _id: string;
   title: string;
